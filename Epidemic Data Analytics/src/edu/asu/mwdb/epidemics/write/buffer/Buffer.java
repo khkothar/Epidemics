@@ -1,12 +1,12 @@
-package write.buffer;
+package edu.asu.mwdb.epidemics.write.buffer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import domain.State;
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.State;
+import edu.asu.mwdb.epidemics.domain.Word;
 
 public class Buffer {
 	

@@ -1,4 +1,4 @@
-package domain;
+package edu.asu.mwdb.epidemics.domain;
 
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;

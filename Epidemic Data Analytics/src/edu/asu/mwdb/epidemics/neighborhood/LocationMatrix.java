@@ -1,4 +1,4 @@
-package neighborhood;
+package edu.asu.mwdb.epidemics.neighborhood;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import domain.State;
+import edu.asu.mwdb.epidemics.domain.State;
 
 public class LocationMatrix {
 	private Map<State, List<State>> neighborMap;

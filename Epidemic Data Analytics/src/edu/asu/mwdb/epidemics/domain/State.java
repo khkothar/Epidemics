@@ -1,5 +1,4 @@
-package domain;
-
+package edu.asu.mwdb.epidemics.domain;
 public enum State {
 	
 	US_AK("US-AK"), 

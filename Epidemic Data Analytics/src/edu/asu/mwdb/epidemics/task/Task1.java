@@ -1,16 +1,15 @@
-package task;
+package edu.asu.mwdb.epidemics.task;
 
 import java.io.IOException;
 
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
-
-import read.EpidemicSimulationFileReaderThread;
-import write.buffer.BufferPool;
-import write.csv.Dictionary;
-import write.csv.DictionaryWriter;
-import domain.Directory;
-import domain.Resolution;
+import edu.asu.mwdb.epidemics.domain.Directory;
+import edu.asu.mwdb.epidemics.domain.Resolution;
+import edu.asu.mwdb.epidemics.read.EpidemicSimulationFileReaderThread;
+import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
+import edu.asu.mwdb.epidemics.write.csv.Dictionary;
+import edu.asu.mwdb.epidemics.write.csv.DictionaryWriter;
 
 public class Task1 {
 

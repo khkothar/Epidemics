@@ -1,4 +1,4 @@
-package domain;
+package edu.asu.mwdb.epidemics.domain;
 
 public class Window {
 	

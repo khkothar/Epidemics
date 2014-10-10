@@ -1,4 +1,4 @@
-package write.heatmap;
+package edu.asu.mwdb.epidemics.write.heatmap;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.tc33.jheatchart.HeatChart;
 
-import domain.State;
+import edu.asu.mwdb.epidemics.domain.State;
 
 
 public class HeatMap {

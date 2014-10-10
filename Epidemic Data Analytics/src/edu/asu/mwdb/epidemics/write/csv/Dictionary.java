@@ -1,12 +1,11 @@
-package write.csv;
+package edu.asu.mwdb.epidemics.write.csv;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import write.buffer.Buffer;
-
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.Word;
+import edu.asu.mwdb.epidemics.write.buffer.Buffer;
 
 public class Dictionary {
 	

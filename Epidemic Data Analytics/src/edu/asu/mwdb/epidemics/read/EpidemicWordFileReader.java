@@ -1,4 +1,4 @@
-package read;
+package edu.asu.mwdb.epidemics.read;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,9 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import write.buffer.Buffer;
-import write.buffer.BufferPool;
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.Word;
+import edu.asu.mwdb.epidemics.write.buffer.Buffer;
+import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
 
 public class EpidemicWordFileReader implements Runnable {
 	

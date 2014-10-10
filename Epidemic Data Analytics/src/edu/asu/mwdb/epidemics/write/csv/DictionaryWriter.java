@@ -1,9 +1,9 @@
-package write.csv;
+package edu.asu.mwdb.epidemics.write.csv;
 
 import java.io.IOException;
 
-import write.buffer.Buffer;
-import write.buffer.BufferPool;
+import edu.asu.mwdb.epidemics.write.buffer.Buffer;
+import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
 
 
 public class DictionaryWriter implements Runnable {

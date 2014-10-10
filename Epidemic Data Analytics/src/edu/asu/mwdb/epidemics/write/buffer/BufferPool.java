@@ -1,4 +1,4 @@
-package write.buffer;
+package edu.asu.mwdb.epidemics.write.buffer;
 
 import java.util.LinkedList;
 import java.util.Queue;

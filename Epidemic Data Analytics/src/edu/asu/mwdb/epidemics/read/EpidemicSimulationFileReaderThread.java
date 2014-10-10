@@ -1,13 +1,13 @@
-package read;
+package edu.asu.mwdb.epidemics.read;
 
 import java.io.IOException;
 
-import write.buffer.Buffer;
-import write.buffer.BufferPool;
-import domain.Directory;
-import domain.Resolution;
-import domain.Window;
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.Directory;
+import edu.asu.mwdb.epidemics.domain.Resolution;
+import edu.asu.mwdb.epidemics.domain.Window;
+import edu.asu.mwdb.epidemics.domain.Word;
+import edu.asu.mwdb.epidemics.write.buffer.Buffer;
+import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
 
 public class EpidemicSimulationFileReaderThread implements Runnable {
 

@@ -1,13 +1,13 @@
-package neighborhood;
+package edu.asu.mwdb.epidemics.neighborhood;
 
 import java.util.List;
 import java.util.Map;
 
-import write.buffer.Buffer;
-import write.buffer.BufferPool;
-import domain.State;
-import domain.Window;
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.State;
+import edu.asu.mwdb.epidemics.domain.Window;
+import edu.asu.mwdb.epidemics.domain.Word;
+import edu.asu.mwdb.epidemics.write.buffer.Buffer;
+import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
 
 public class ComputeAverageDiffThread implements Runnable {
 

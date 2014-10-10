@@ -1,4 +1,4 @@
-package task;
+package edu.asu.mwdb.epidemics.task;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,12 +10,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import neighborhood.LocationMatrix;
-import read.DictionaryReader;
-import write.heatmap.HeatMap;
-import write.heatmap.WindowProperties;
-import domain.State;
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.State;
+import edu.asu.mwdb.epidemics.domain.Word;
+import edu.asu.mwdb.epidemics.neighborhood.LocationMatrix;
+import edu.asu.mwdb.epidemics.read.DictionaryReader;
+import edu.asu.mwdb.epidemics.write.heatmap.HeatMap;
+import edu.asu.mwdb.epidemics.write.heatmap.WindowProperties;
 
 public class Task3 {
 	

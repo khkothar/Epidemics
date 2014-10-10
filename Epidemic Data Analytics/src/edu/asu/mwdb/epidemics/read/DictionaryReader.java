@@ -1,11 +1,11 @@
-package read;
+package edu.asu.mwdb.epidemics.read;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import domain.Word;
+import edu.asu.mwdb.epidemics.domain.Word;
 
 public class DictionaryReader {
 	

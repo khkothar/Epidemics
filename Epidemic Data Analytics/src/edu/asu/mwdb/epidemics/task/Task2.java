@@ -1,13 +1,13 @@
-package task;
+package edu.asu.mwdb.epidemics.task;
 
 import java.io.IOException;
 
-import neighborhood.ComputeAverageDiffThread;
-import neighborhood.LocationMatrix;
-import read.EpidemicWordFileReader;
-import write.buffer.BufferPool;
-import write.csv.Dictionary;
-import write.csv.DictionaryWriter;
+import edu.asu.mwdb.epidemics.neighborhood.ComputeAverageDiffThread;
+import edu.asu.mwdb.epidemics.neighborhood.LocationMatrix;
+import edu.asu.mwdb.epidemics.read.EpidemicWordFileReader;
+import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
+import edu.asu.mwdb.epidemics.write.csv.Dictionary;
+import edu.asu.mwdb.epidemics.write.csv.DictionaryWriter;
 
 public class Task2 {
 	

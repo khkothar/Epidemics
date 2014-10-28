@@ -70,8 +70,8 @@ public class EpidemicWordFilesReader {
 		//Calculating the DTW between two input simulation files.
 		for(String state : stateList) {
 			stateValueList1 = simulationMapFile1.get(state);
-			stateValueList2 = simulationMapFile1.get(state);
-			System.out.println(" For state : " + state);
+			stateValueList2 = simulationMapFile2.get(state);
+			
 			DTWMatrix = new double[stateValueList1.size()][stateValueList2.size()];
 			LambdaDTW = new double[stateValueList1.size()][stateValueList2.size()];
 	
@@ -80,12 +80,12 @@ public class EpidemicWordFilesReader {
 				for(int j = 0 ; j < stateValueList2.size() ; j++) {
 					DTWMatrix[i][j] = Math.pow((stateValueList1.get(i) - stateValueList2.get(j)),2);
 					//Copying the first row and first colume in the LambdaMatrix from DTWMatrix.
-//					if(i == 0) {
-//						LambdaDTW[0][j] = DTWMatrix[0][j];
-//					}
-//					if(j == 0) {
-//						LambdaDTW[i][0] = DTWMatrix[i][0];
-//					}
+					if(i == 0) {
+						LambdaDTW[0][j] = DTWMatrix[0][j];
+					}
+					if(j == 0) {
+						LambdaDTW[i][0] = DTWMatrix[i][0];
+					}
 				}
 			}
 			
@@ -98,13 +98,10 @@ public class EpidemicWordFilesReader {
 			}
 			
 			//Adding the last element in DTW array in the cumulative DTW distance.
-			System.out.println(" ---> final value 1 :" + LambdaDTW[1][1]);
 			cumulativeDTW += Math.sqrt(LambdaDTW[simulationMapFile1.size() - 1][simulationMapFile2.size() - 1]);
 			
 		}
-		System.out.println(" ----> cumulativeDTW" + cumulativeDTW);
 		avgDTWDistance = (double)cumulativeDTW/stateList.size();
-		System.out.println(" ----> avgDTWDistance" + avgDTWDistance);
 		return (double)1/(1+avgDTWDistance);
 	}
 	
@@ -145,7 +142,6 @@ public class EpidemicWordFilesReader {
 		}
 		
 		bufReader.close();
-		System.out.println(" " + simulationFileMap.keySet().toString());
 		return simulationFileMap;
 	}
 	
@@ -156,7 +152,7 @@ public class EpidemicWordFilesReader {
 //		System.out.println("Print the similarity : " + similarity);
 		
 		double similarity = t.getSimilarityByDTW("InputCSVs/1.csv", "InputCSVs/2.csv");
-		System.out.println("Print the similarity : " + similarity);
+		System.out.println("Print DTW similarity : " + similarity);
 		
 	}
 

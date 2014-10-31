@@ -1,5 +1,7 @@
 package edu.asu.mwdb.epidemics.domain;
 
+import java.util.Arrays;
+
 public class Window {
 	
 	private float[] values;
@@ -32,4 +34,28 @@ public class Window {
 		}
 		return windowString.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(values);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Window other = (Window) obj;
+		if (!Arrays.equals(values, other.values))
+			return false;
+		return true;
+	}
+	
+	
 }

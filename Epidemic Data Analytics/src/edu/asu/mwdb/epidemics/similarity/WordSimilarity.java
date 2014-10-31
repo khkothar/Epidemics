@@ -14,14 +14,11 @@ public class WordSimilarity implements Similarity {
 
 	private Set<Window> s1, s2;
 
-	public WordSimilarity() throws IOException {
-		s1 = new HashSet<Window>();
-		s2 = new HashSet<Window>();
-	}
-
 	@Override
 	public float getScore(String f1, String f2) throws IOException {
-		
+
+		s1 = new HashSet<Window>();
+		s2 = new HashSet<Window>();
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"epidemic_word_file.csv")));
 		String line = "";
@@ -38,6 +35,7 @@ public class WordSimilarity implements Similarity {
 		br.close();
 		Set<Window> cloneS1 = new HashSet<Window>(s1);
 		cloneS1.retainAll(s2);
+		
 		return cloneS1.size();
 	}
 

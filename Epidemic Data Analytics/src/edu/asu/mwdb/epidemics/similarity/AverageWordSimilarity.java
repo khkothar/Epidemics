@@ -14,14 +14,11 @@ public class AverageWordSimilarity implements Similarity {
 
 	private Set<Window> s1, s2;
 
-	public AverageWordSimilarity() throws IOException {
-		s1 = new HashSet<Window>();
-		s2 = new HashSet<Window>();
-	}
-
 	@Override
 	public float getScore(String f1, String f2) throws IOException {
 		
+		s1 = new HashSet<Window>();
+		s2 = new HashSet<Window>();
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"epidemic_word_file_avg.csv")));
 		String line = "";

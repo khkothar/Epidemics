@@ -34,7 +34,7 @@ public class AverageWordSimilarity implements Similarity {
 	}
 
 	@Override
-	public float getScore() {
+	public float getScore(String f1, String f2) {
 		Set<Window> cloneS1 = new HashSet<Window>(s1);
 		cloneS1.retainAll(s2);
 		return cloneS1.size();

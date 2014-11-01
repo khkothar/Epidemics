@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,8 @@ public class SVD {
 		}
 	}
 	
+	//Creates input matrix of as epidemic simulation files as Object and words as features 
+	// This input matrix is passed to SVD matlab function for Eigen decomposition.
 	public int[][] getInputMatrix(String fileName) throws Exception {
 		Map<Window,List<Id>> wordFileMap = getEpidemicWordMap(fileName);
 		int[][] inputMatrix = new int[fileNameSet.size()][wordFileMap.size()];
@@ -88,9 +91,11 @@ public class SVD {
 			}
 			columnIndex++;
 		}
+		
 		return inputMatrix;
 	}
 	
+	//Creating matrix file for providing input to MATLAB SVD function.
 	public void createInputMatrixToFile(String inFileName) throws Exception {
 		int[][] inputMatrix = getInputMatrix(inFileName);
 		BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/X.csv"));
@@ -109,22 +114,82 @@ public class SVD {
 		bufWriter.close();
 	}
 	
-	public void svDecomposition(String dictionaryFile, int r) throws MatlabInvocationException, MatlabConnectionException{
+	public void svDecomposition(int r) throws MatlabInvocationException, MatlabConnectionException{
 		//Create a proxy, which we will use to control MATLAB
 		 MatlabProxyFactory factory = new MatlabProxyFactory();
 		 MatlabProxy proxy = factory.getProxy();
-		 r = 3;
-		 proxy.eval("[U,S,V] = svDecomposition(" + r + ")");		 
-		 proxy.disconnect();		 
+		 proxy.eval("[U,S,V] = svDecomposition(" + r + ")");
+		 proxy.disconnect();
+	}
+	
+	// Creating list of Score objects in decreasing order of score.
+	private List<List<Score>> getLatentSemanticSimulationScores() throws Exception {
+		
+		BufferedReader bufReader = new BufferedReader(new FileReader(new File("Data/U.csv")));
+		List<List<Score>> resultList = new ArrayList<>();
+		List<Score> tempList;
+		String line = bufReader.readLine();
+		int rowIndex = 0;
+		String[] arrayLine = line.split(","); 
+		
+		for(int i =0; i < arrayLine.length ; i++) {
+			List<Score> list = new ArrayList<>();
+			Score s = new Score(fileNameAccessList.get(rowIndex),Double.parseDouble(arrayLine[i]));
+			list.add(s);
+			resultList.add(list);
+		}
+		rowIndex++;
+		while ((line = bufReader.readLine()) != null) {
+			String[] tempArray = line.split(",");
+			for (int i = 0; i < tempArray.length; i++) {
+				tempList = resultList.remove(i);
+				Score s = new Score(fileNameAccessList.get(rowIndex),Double.parseDouble(tempArray[i]));
+				tempList.add(s);
+				resultList.add(i, tempList);
+			}
+			rowIndex++;
+		}
+		bufReader.close();
+		
+		for(List<Score> list : resultList) {
+			Collections.sort(list);
+		}
+		
+		return resultList;
+	}
+	
+	//Writing to Latent Semantic Score file.
+	public void createLatentSemanticScoreFile() throws Exception {
+		
+		List<List<Score>> outList = getLatentSemanticSimulationScores();
+		BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/SemanticScore.csv"));
+		int semanticIndex = 1;
+		
+		for (List<Score> list : outList) {
+			bufWriter.write("Latent Semantic : " +  semanticIndex++);
+			bufWriter.newLine();
+			for (Score s : list) {
+				bufWriter.write(s.toString());
+				bufWriter.newLine();
+			}
+			bufWriter.newLine();
+		}
+		bufWriter.close();
+		
 	}
 	
 	public static void main(String[] args) {
 		SVD s = new SVD();
+		
 		try {
 			s.createInputMatrixToFile("epidemic_word_file.csv");
 			System.out.println("Matrix file created !!");
-			s.svDecomposition("", 5);
+			s.svDecomposition(5);
 			System.out.println("SVD matrices created!!");
+			s.createLatentSemanticScoreFile();
+			System.out.println("Score file created !!!");
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -189,7 +189,6 @@ public class SVD {
 			s.createLatentSemanticScoreFile();
 			System.out.println("Score file created !!!");
 			
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

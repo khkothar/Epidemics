@@ -27,14 +27,13 @@ public class TimeSeriesSearch {
 	 */
 		public List<String> getKSimilarSimulations(String queryFile, String simulationDir, int k, SimilarityMeasure measure) throws Exception{
 			ValueComparator comparator = new ValueComparator(new SimilarityDomain());
-			PriorityQueue<SimilarityDomain> priorityQue = new PriorityQueue<SimilarityDomain>(comparator);
+			PriorityQueue<SimilarityDomain> priorityQue = new PriorityQueue<SimilarityDomain>(k, comparator);
 			DecimalFormat df = new DecimalFormat("#.#########");
 			File folder = new File(simulationDir);
 			File[] listOfFiles = folder.listFiles();
 			List<String> kSimilarSims = new ArrayList<String>();
 			for(int i = 0; i < listOfFiles.length; i++){
 				float sim = getSimilarity(queryFile, listOfFiles[i].getAbsolutePath(), measure);
-				//new DTWSimilarity().getScore(queryFile, listOfFiles[i].getAbsolutePath());
 				System.out.println("Similarity between queryFile and " + listOfFiles[i].getName()+" is : "+ df.format(sim));
 				SimilarityDomain simObj = new SimilarityDomain();
 				simObj.setQueryFile(queryFile);

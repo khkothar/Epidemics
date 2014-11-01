@@ -4,9 +4,12 @@
 package edu.asu.mwdb.epidemics.epidemic.analysis;
 
 import edu.asu.mwdb.epidemics.domain.*;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +18,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import matlabcontrol.MatlabConnectionException;
+import matlabcontrol.MatlabInvocationException;
+import matlabcontrol.MatlabProxy;
+import matlabcontrol.MatlabProxyFactory;
 import edu.asu.mwdb.epidemics.domain.Word;
 
 public class SVD {
@@ -53,13 +60,15 @@ public class SVD {
 			throw new Exception("File name set is Empty!!!");
 		}
 		for(String fileName : fileNameSet) {
-			fileNameAccessList.add(fileName);
+			fileNameAccessList.add(fileName.trim());
 		}
 	}
 	
 	public int[][] getInputMatrix(String fileName) throws Exception {
 		Map<Window,List<Id>> wordFileMap = getEpidemicWordMap(fileName);
 		int[][] inputMatrix = new int[fileNameSet.size()][wordFileMap.size()];
+		int columnIndex = 0;
+		int rowIndex;
 		
 		//Updating the file access list used for filling up the 2d input array. 
 		updateFileNameAccessList();
@@ -68,8 +77,6 @@ public class SVD {
 			Window window = entry.getKey();
 			List<Id> idList = entry.getValue();
 			windowAccessList.add(window);
-			int columnIndex = 0;
-			int rowIndex;
 			
 			for(Id id : idList) {
 				//Updating the count matrix column wise using the every word and index of fileName in fileNameAccessList.
@@ -79,8 +86,48 @@ public class SVD {
 				}
 				inputMatrix[rowIndex][columnIndex] += 1;
 			}
+			columnIndex++;
 		}
 		return inputMatrix;
+	}
+	
+	public void createInputMatrixToFile(String inFileName) throws Exception {
+		int[][] inputMatrix = getInputMatrix(inFileName);
+		BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/X.csv"));
+		StringBuffer line = new StringBuffer();
+		
+		for (int i = 0; i < inputMatrix.length; i++) {
+			for (int j = 0; j < inputMatrix[i].length; j++) {
+				line.append(inputMatrix[i][j]);
+				line.append(",");
+			}
+			bufWriter.write(line.deleteCharAt(line.length() - 1).toString());
+			bufWriter.newLine();
+			line.setLength(0);
+		}
+		
+		bufWriter.close();
+	}
+	
+	public void svDecomposition(String dictionaryFile, int r) throws MatlabInvocationException, MatlabConnectionException{
+		//Create a proxy, which we will use to control MATLAB
+		 MatlabProxyFactory factory = new MatlabProxyFactory();
+		 MatlabProxy proxy = factory.getProxy();
+		 r = 3;
+		 proxy.eval("[U,S,V] = svDecomposition(" + r + ")");		 
+		 proxy.disconnect();		 
+	}
+	
+	public static void main(String[] args) {
+		SVD s = new SVD();
+		try {
+			s.createInputMatrixToFile("epidemic_word_file.csv");
+			System.out.println("Matrix file created !!");
+			s.svDecomposition("", 5);
+			System.out.println("SVD matrices created!!");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

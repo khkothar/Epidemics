@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.asu.mwdb.epidemics.latent_epidemic_analysis;
+package edu.asu.mwdb.epidemics.epidemic.analysis;
 
 import edu.asu.mwdb.epidemics.domain.*;
 import java.io.BufferedReader;

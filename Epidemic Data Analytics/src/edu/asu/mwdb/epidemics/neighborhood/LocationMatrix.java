@@ -41,13 +41,17 @@ public class LocationMatrix {
 
 	private void setShortestDistanceMatrix(File shortestDistanceFile) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(shortestDistanceFile));
-		String line = "";
+		String line = br.readLine();
 		
 		while((line = br.readLine()) != null) {
 			String[] distancesAsString = line.split(",");
-			int[] distancesAsInt = new int[distancesAsString.length];
-			int i = 0;
+			int[] distancesAsInt = new int[distancesAsString.length - 1];
+			int i = -1;
 			for(String distance : distancesAsString) {
+				if(i == -1) {
+					i = 0;
+					continue;
+				}
 				if(!distance.equals("100"))
 					distancesAsInt[i++] = Integer.parseInt(distance);
 				else

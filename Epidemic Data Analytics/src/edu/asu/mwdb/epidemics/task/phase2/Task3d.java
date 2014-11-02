@@ -100,7 +100,7 @@ public class Task3d {
 		fileNameList = fileNames;   
 	}
 
-	private void execute3D(int r, String option, String directory) throws Exception{
+	private void execute3D(int r, int topK, String option, String directory) throws Exception{
 		switch(option){
 		case "3a":
 			SVD s = new SVD();
@@ -109,7 +109,7 @@ public class Task3d {
 			System.out.println("Matrix file created !!");
 			s.svDecomposition(r,true);
 			System.out.println("SVD matrices created!!");
-			s.createLatentSemanticScoreFile("Data/SemanticScore.csv",fileNameList);
+			s.createLatentSemanticScoreFile("Data/SimilarityResults.csv","Data/SemanticScore.csv",fileNameList, topK);
 			System.out.println("Score file created !!!");
 			break;
 		case "3b":
@@ -143,7 +143,7 @@ public class Task3d {
 			String directory = "InputCSVs";
 			task3D.createWordCountMatrix();
 			task3D.writeMatrix();
-			task3D.execute3D(5, "3a", directory);			
+			task3D.execute3D(5, topK,"3a", directory);			
 
 		} catch (Exception e) {
 			e.printStackTrace();

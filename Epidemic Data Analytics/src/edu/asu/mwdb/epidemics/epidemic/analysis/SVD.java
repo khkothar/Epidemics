@@ -114,11 +114,11 @@ public class SVD {
 		bufWriter.close();
 	}
 	
-	public void svDecomposition(int r) throws MatlabInvocationException, MatlabConnectionException{
+	public void svDecomposition(int r, boolean isQuery) throws MatlabInvocationException, MatlabConnectionException{
 		//Create a proxy, which we will use to control MATLAB
 		 MatlabProxyFactory factory = new MatlabProxyFactory();
 		 MatlabProxy proxy = factory.getProxy();
-		 proxy.eval("[U,S,V] = svDecomposition(" + r + ")");
+		 proxy.eval("[U,S,V] = svDecomposition(" + r + "," + isQuery + ")");
 		 proxy.disconnect();
 	}
 	
@@ -159,20 +159,24 @@ public class SVD {
 	}
 	
 	//Writing to Latent Semantic Score file.
-	public void createLatentSemanticScoreFile(String inFile, String outFile, List<String> fileNameList) throws Exception {
+	public void createLatentSemanticScoreFile(String inFile, String outFile, List<String> fileNameList, int noOfLines) throws Exception {
 		
 		List<List<Score>> outList = getLatentSemanticSimulationScores(inFile, fileNameList);
 		BufferedWriter bufWriter = new BufferedWriter(new FileWriter(outFile));
 		int semanticIndex = 1;
-		
-		for (List<Score> list : outList) {
+		int line = 0;
+		for (List<Score> list : outList) {			
 			bufWriter.write("Latent Semantic : " +  semanticIndex++);
 			bufWriter.newLine();
 			for (Score s : list) {
 				bufWriter.write(s.toString());
 				bufWriter.newLine();
+				++line;
+				if(noOfLines!=-1 && (line>=noOfLines)) {
+					break;
+				}
 			}
-			bufWriter.newLine();
+			bufWriter.newLine();			
 		}
 		bufWriter.close();
 		
@@ -184,9 +188,9 @@ public class SVD {
 		try {
 			s.createInputMatrixToFile("epidemic_word_file.csv");
 			System.out.println("Matrix file created !!");
-			s.svDecomposition(5);
+			s.svDecomposition(5,false);
 			System.out.println("SVD matrices created!!");
-			s.createLatentSemanticScoreFile("Data/U.csv","Data/SemanticScore.csv",fileNameAccessList);
+			s.createLatentSemanticScoreFile("Data/U.csv","Data/SemanticScore.csv",fileNameAccessList, -1);
 			System.out.println("Score file created !!!");
 			
 		} catch(Exception e) {

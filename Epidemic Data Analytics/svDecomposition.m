@@ -17,6 +17,6 @@ function [U, S, V] = svDecomposition(r, isQuery)
     if(isQuery)
         queryMatrix = csvread('./Data/QUERY.csv');
         query = U(:,1:r) * S(1:r,1:r) * V(1:r,:) * queryMatrix(:,1);
-        csvwrite('./Data/SimilarResults.csv', query);
+        csvwrite('./Data/SimilarityResults.csv', query);
         end
 end

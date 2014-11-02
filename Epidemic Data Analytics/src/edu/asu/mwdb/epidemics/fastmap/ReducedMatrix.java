@@ -2,14 +2,22 @@ package edu.asu.mwdb.epidemics.fastmap;
 
 public class ReducedMatrix {
 	
-	float reducedMatrix[][];
+	private float matrix[][];
+	private DistanceMatrix distanceMatrix;
 
-	public ReducedMatrix(int n, int k) {
-		// TODO Auto-generated constructor stub
+	public ReducedMatrix(int n, int k, DistanceMatrix distanceMatrix) {
+		this.distanceMatrix = distanceMatrix;
+		matrix = new float[n][k];
 	}
 	
 	public void addColumn(int current, Pivot pivot) {
-		// TODO: Implement this method
+		for(int i = 0; i < matrix.length; i++) {
+			matrix[i][current] = distanceMatrix.getProjectedDistance(pivot, i);
+		}
+	}
+
+	public float[][] getMatrix() {
+		return matrix;
 	}
 	
 }

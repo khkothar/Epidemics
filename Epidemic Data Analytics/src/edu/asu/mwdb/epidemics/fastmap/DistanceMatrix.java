@@ -6,24 +6,26 @@ import edu.asu.mwdb.epidemics.similarity.Similarity;
 
 public class DistanceMatrix {
 
-	private float[][] distanceInOriginalSpace;
-	private float[][] distanceInReducedSpace;
+	private float[][] distanceMatrixInOriginalSpace;
+	private float[][] distanceMatrixInReducedSpace;
 
 	private int current;
 
 	public DistanceMatrix(List<String> files, Similarity similarityMeasure)
 			throws Exception {
 		this.current = 0;
+		distanceMatrixInOriginalSpace = new float[files.size()][files.size()];
+		distanceMatrixInReducedSpace = new float[files.size()][files.size()];
 		// Calculating distances in original space
 		for (int i = 0; i < files.size(); i++) {
 			for (int j = i; j < files.size(); j++) {
 				if (i == j) {
-					distanceInOriginalSpace[i][j] = 0;
+					distanceMatrixInOriginalSpace[i][j] = 0;
 				} else {
 					float distance = 1.0f / (1.0f + similarityMeasure.getScore(
 							files.get(i), files.get(j)));
-					distanceInOriginalSpace[i][j] = distance;
-					distanceInOriginalSpace[j][i] = distance;
+					distanceMatrixInOriginalSpace[i][j] = distance;
+					distanceMatrixInOriginalSpace[j][i] = distance;
 				}
 			}
 		}
@@ -34,13 +36,13 @@ public class DistanceMatrix {
 		for (int i = 0; i < reducedMatrix.length; i++) {
 			for (int j = 0; j < reducedMatrix.length; j++) {
 				if (current == 0) {
-					distanceInReducedSpace[i][j] = (float) Math
-							.sqrt((Math.pow(distanceInOriginalSpace[i][j], 2) - Math
+					distanceMatrixInReducedSpace[i][j] = (float) Math
+							.sqrt((Math.pow(distanceMatrixInOriginalSpace[i][j], 2) - Math
 									.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
 											2)));
 				} else {
-					distanceInReducedSpace[i][j] = (float) Math
-							.sqrt((Math.pow(distanceInReducedSpace[i][j], 2) - Math
+					distanceMatrixInReducedSpace[i][j] = (float) Math
+							.sqrt((Math.pow(distanceMatrixInReducedSpace[i][j], 2) - Math
 									.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
 											2)));
 				}
@@ -49,25 +51,32 @@ public class DistanceMatrix {
 	}
 
 	public float getProjectedDistance(Pivot pivot, int index) {
-		return (distanceInReducedSpace[pivot.getA()][index] * distanceInReducedSpace[pivot.getA()][index] + 
-				pivot.getDistance() * pivot.getDistance() - 
-				distanceInReducedSpace[pivot.getB()][index] * distanceInReducedSpace[pivot.getB()][index])
-				/(2.0f * pivot.getDistance());
+		if(current == 0) {
+			return (distanceMatrixInOriginalSpace[pivot.getA()][index] * distanceMatrixInOriginalSpace[pivot.getA()][index] + 
+					pivot.getDistance() * pivot.getDistance() - 
+					distanceMatrixInOriginalSpace[pivot.getB()][index] * distanceMatrixInOriginalSpace[pivot.getB()][index])
+					/(2.0f * pivot.getDistance());
+		} else {
+			return (distanceMatrixInReducedSpace[pivot.getA()][index] * distanceMatrixInReducedSpace[pivot.getA()][index] + 
+					pivot.getDistance() * pivot.getDistance() - 
+					distanceMatrixInReducedSpace[pivot.getB()][index] * distanceMatrixInReducedSpace[pivot.getB()][index])
+					/(2.0f * pivot.getDistance());
+		}
 	}
 
 	public float[][] getCurrentMatrix() {
 		if (current == 0)
-			return distanceInOriginalSpace;
+			return distanceMatrixInOriginalSpace;
 		else
-			return distanceInReducedSpace;
+			return distanceMatrixInReducedSpace;
 	}
 
 	public float[][] getDistanceMatrixInOriginalSpace() {
-		return distanceInOriginalSpace;
+		return distanceMatrixInOriginalSpace;
 	}
 
 	public float[][] getDistanceMatrixInReducedSpace() {
-		return distanceInReducedSpace;
+		return distanceMatrixInReducedSpace;
 	}
 
 }

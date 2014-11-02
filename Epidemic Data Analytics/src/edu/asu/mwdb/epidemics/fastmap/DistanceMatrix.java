@@ -48,6 +48,8 @@ public class DistanceMatrix {
 				}
 			}
 		}
+		
+		current++;
 	}
 
 	public float getProjectedDistance(Pivot pivot, int index) {

@@ -63,7 +63,7 @@ public class Task1 {
 			similarityMeasure = "Weighted Difference Word";
 			break;
 		}
-		float similarityScore  = similarity.getScore(getFileName(file1), getFileName(file2));
+		float similarityScore  = similarity.getScore(file1,file2);
 		DecimalFormat df = new DecimalFormat("#.#########");
 		System.out.println(similarityMeasure + " Similarity between " +
 		getFileName(file1) + " and " +getFileName(file2) +" : "+ df.format(similarityScore));

@@ -4,11 +4,11 @@ public class Pivot {
 	private int a;
 	private int b;
 	private float distance;
-	public Pivot(DistanceMatrix dm) {
+	public Pivot(float[][] distMatrix) {
 		//TODO: Fill this constructor with business logic
-		a = getMaxFromRow(dm.getCurrentMatrix(), 0);
-		b = getMaxFromRow(dm.getCurrentMatrix(), a);
-		distance = dm.getCurrentMatrix()[a][b];
+		a = getMaxFromRow(distMatrix, 0);
+		b = getMaxFromRow(distMatrix, a);
+		distance = distMatrix[a][b];
 	}
 	
 	private int getMaxFromRow(float[][] currentMatrix, int index) {

@@ -3,6 +3,7 @@ package edu.asu.mwdb.epidemics.time_series_search;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -15,6 +16,7 @@ import edu.asu.mwdb.epidemics.similarity.WeightedWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.WordSimilarity;
 
 public class TimeSeriesSearch {
+	public List<SimilarityDomain> simDomainList;
 	/**
 	 * 
 	 * @param queryFile
@@ -24,7 +26,7 @@ public class TimeSeriesSearch {
 	 * @return
 	 * @throws Exception
 	 * Returns the list of k similar simulations
-	 */
+	 */		
 		public List<String> getKSimilarSimulations(String queryFile, String simulationDir, int k, SimilarityMeasure measure) throws Exception{
 			ValueComparator comparator = new ValueComparator(new SimilarityDomain());
 			PriorityQueue<SimilarityDomain> priorityQue = new PriorityQueue<SimilarityDomain>(k, comparator);
@@ -42,6 +44,10 @@ public class TimeSeriesSearch {
 				priorityQue.add(simObj);
 				if(priorityQue.size() > k)
 					priorityQue.poll();
+			}
+			simDomainList = new LinkedList<>();
+			for(SimilarityDomain sObj : priorityQue){
+				simDomainList.add(sObj);
 			}
 			SimilarityDomain sim = priorityQue.poll();
 			while(sim != null){

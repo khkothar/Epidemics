@@ -10,9 +10,14 @@ import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
 import edu.asu.mwdb.epidemics.domain.Window;
 import edu.asu.mwdb.epidemics.domain.Word;
 import edu.asu.mwdb.epidemics.epidemic.analysis.SVD;
+import edu.asu.mwdb.epidemics.epidemic.analysis.Task3C;
+import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
+import edu.asu.mwdb.epidemics.time_series_search.TimeSeriesSearch;
 
 /*import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
@@ -100,9 +105,17 @@ public class Task3d {
 		fileNameList = fileNames;   
 	}
 
-	private void execute3D(int r, int topK, String option, String directory) throws Exception{
+	/* 
+	 * r - R Semantics
+	 * topK - Top K similar files to Query
+	 * option - 3a/3b/3c
+	 * directory - Epidemic simulations file directory
+	 * similarityMeasure - 1-8*/
+	private void execute3D(int r, int topK, String option, String directory, int similarityMeasure) throws Exception{
 		switch(option){
 		case "3a":
+			createWordCountMatrix();
+			writeMatrix();
 			SVD s = new SVD();
 			updateListFilesInFolder(new File(directory));
 			s.createInputMatrixToFile("epidemic_word_file.csv");
@@ -115,6 +128,22 @@ public class Task3d {
 		case "3b":
 			break;
 		case "3c":
+			Task3C task3c = new Task3C();
+			TimeSeriesSearch timeSeriesSearch = new TimeSeriesSearch();
+			updateListFilesInFolder(new File(directory));
+			timeSeriesSearch.getKSimilarSimulations("query dictionary/14.csv", directory, fileNameList.size(), SimilarityMeasureUtils.getSimilarityMeasure(similarityMeasure));
+			//Write List to File
+			BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/QUERY.csv"));
+			StringBuffer line = new StringBuffer();
+			for(SimilarityDomain simObj : timeSeriesSearch.simDomainList){				
+				line.append(simObj.getSimilarity());
+				line.append(System.getProperty("line.separator"));
+			}
+			bufWriter.write(line.deleteCharAt(line.length() - 1).toString());
+			bufWriter.newLine();
+			line.setLength(0);
+			bufWriter.close();
+			task3c.executeLODUTask3C(directory, r, similarityMeasure, topK, true, "Data/SimilarityResults.csv");
 			break;
 		default:
 			break;
@@ -122,28 +151,23 @@ public class Task3d {
 
 	}
 	public static void main(String[] args) {
-		Task3d task3D = new Task3d();
-
-		
-		String input1 = "";
-		int input2 = Integer.parseInt("5");
+		Task3d task3D = new Task3d();		
+		String directory = "InputCSVs";
+		int rSemantics = Integer.parseInt("5");
 		int topK = Integer.parseInt("15");
-		String input3 = "";
+		String choice = "3c";
+		int similarityMeasure = Integer.parseInt("1");
 		
 		/*String[] arg = {"InputCSVs","5","3","10"};
 		try {
 			Task1.main(arg);
 		} catch (IOException | InterruptedException | MatlabConnectionException
 				| MatlabInvocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
 
-		try {
-			String directory = "InputCSVs";
-			task3D.createWordCountMatrix();
-			task3D.writeMatrix();
-			task3D.execute3D(5, topK,"3a", directory);			
+		try {			
+			task3D.execute3D(rSemantics,topK,choice, directory, similarityMeasure);			
 
 		} catch (Exception e) {
 			e.printStackTrace();

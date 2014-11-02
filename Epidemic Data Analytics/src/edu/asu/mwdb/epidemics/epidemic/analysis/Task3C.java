@@ -42,38 +42,38 @@ public class Task3C {
 	}
 	
 	//Create a Similarity Similarity File matrix.
-	public float[][] createSimSimMatrix(String directoryPath, String simMeasure) throws Exception {
+	public float[][] createSimSimMatrix(String directoryPath, int simMeasure) throws Exception {
 		updateListFilesInFolder(new File(directoryPath));
-		for(String str : fileNameList) {
+		/*for(String str : fileNameList) {
 			System.out.println(" " + str);
-		}
+		}*/
 		int numOfFile = fileNameList.size();
 		float[][] simSimMatrix = new float[numOfFile][numOfFile];
 		Similarity similarity = null;
 		
 		switch(simMeasure) {
-		case "1a": 
+		case 1: 
 			similarity = new EuclideanSimilarity();
 			break;
-		case "1b":
+		case 2:
 			similarity = new DTWSimilarity();
 			break;
-		case "1c": 
+		case 3: 
 			similarity = new WordSimilarity();
 			break;
-		case "1d":
+		case 4:
 			similarity = new AverageWordSimilarity();
 			break;
-		case "1e": 
+		case 5: 
 			similarity = new DifferenceWordSimilarity();
 			break;
-		case "1f":
+		case 6:
 			similarity = new WeightedWordSimilarity();
 			break;
-		case "1g": 
+		case 7: 
 			similarity = new WeightedAverageWordSimilarity();
 			break;
-		case "1h":
+		case 8:
 			similarity = new WeightedDiffWordSimilarity();
 			break;
 		}
@@ -105,14 +105,14 @@ public class Task3C {
 		bufWriter.close();
 	}
 	
-	public void executeLODUTask3C(String directoryPath,int r, String simMeasure) throws Exception {
+	public void executeLODUTask3C(String directoryPath,int r, int simMeasure, int topK, boolean isQuery, String inputFile) throws Exception {
 		float[][] simSimMatrix = createSimSimMatrix(directoryPath, simMeasure);
 		createInputMatrixToFileForSVD(simSimMatrix);
 		System.out.println("Matrix file created 3C!!! ");
 		SVD svd = new SVD();
-		svd.svDecomposition(r,false);
+		svd.svDecomposition(r,isQuery);
 		System.out.println("SVD matrices created!!");
-		svd.createLatentSemanticScoreFile("Data/U.csv","Data/SemanticScore3C.csv",fileNameList, -1);
+		svd.createLatentSemanticScoreFile(inputFile,"Data/SemanticScore3C.csv",fileNameList, topK);
 		System.out.println("Score file created !!!");
 	}
 
@@ -120,9 +120,10 @@ public class Task3C {
 		Task3C instance = new Task3C();
 		String input1 = "inputCSVs";
 		int input2 = Integer.parseInt("5");
-		String input3 = "1a";
+		int input3 = Integer.parseInt("1");
+		String defaultFile = "Data/U.csv";
 		try {
-			instance.executeLODUTask3C(input1,input2,input3);
+			instance.executeLODUTask3C(input1,input2,input3, -1, false, defaultFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

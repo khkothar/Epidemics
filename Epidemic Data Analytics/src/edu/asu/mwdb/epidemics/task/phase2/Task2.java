@@ -23,8 +23,9 @@ public class Task2 {
 		String simFilesPath = args[1];
 		int k = Integer.parseInt(args[2]);
 		int similarityType = Integer.parseInt(args[3]);
+		System.out.println(k + " most Similar Files to " + queryFile.substring(queryFile.lastIndexOf(File.separator)+1, queryFile.length())
+				+ " Using " + SimilarityMeasureUtils.getSimilarityMeasure(similarityType) + " Similarity Measure");
 		List<String> similarSimulationFiles = timeSeriesSearch.getKSimilarSimulations(queryFile, simFilesPath, k, SimilarityMeasureUtils.getSimilarityMeasure(similarityType));
-		System.out.println(similarSimulationFiles);
 		DrawHeatMap.drawHeatMap(new File(queryFile));
 		for(String file : similarSimulationFiles){
 			String path = simFilesPath + "\\" + file;

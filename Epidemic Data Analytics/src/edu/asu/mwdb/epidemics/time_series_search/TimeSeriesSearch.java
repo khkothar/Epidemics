@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 
+
+import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
 //import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
 import edu.asu.mwdb.epidemics.similarity.AverageWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
@@ -88,49 +90,6 @@ public class TimeSeriesSearch {
 			default:
 				return 0;
 			}
-		}
-		
-		private class SimilarityDomain {
-			private String queryFile;
-			private String simFile;
-			private float similarity;
-			/**
-			 * @return the queryFile
-			 */
-			public String getQueryFile() {
-				return queryFile;
-			}
-			/**
-			 * @param queryFile the queryFile to set
-			 */
-			public void setQueryFile(String queryFile) {
-				this.queryFile = queryFile;
-			}
-			/**
-			 * @return the simFile
-			 */
-			public String getSimFile() {
-				return simFile;
-			}
-			/**
-			 * @param simFile the simFile to set
-			 */
-			public void setSimFile(String simFile) {
-				this.simFile = simFile;
-			}
-			/**
-			 * @return the similarity
-			 */
-			public float getSimilarity() {
-				return similarity;
-			}
-			/**
-			 * @param similarity the similarity to set
-			 */
-			public void setSimilarity(float similarity) {
-				this.similarity = similarity;
-			}
-			
 		}
 		
 		private class ValueComparator implements Comparator<SimilarityDomain> {

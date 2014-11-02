@@ -3,10 +3,14 @@ package edu.asu.mwdb.epidemics.time_series_search;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+
+
 
 
 
@@ -38,8 +42,8 @@ public class TimeSeriesSearch {
 				File f1 = new File(queryFile);
 				//File f2 = new File(listOfFiles[i].getAbsolutePath());
 				//float sim = getSimilarity(f1.getName(), listOfFiles[i].getName(), measure);
-				float sim = SimilarityMeasureUtils.getSimilarity(measure).getScore(f1.getAbsolutePath(), listOfFiles[i].getAbsolutePath());
-				//System.out.println("Similarity between queryFile and " + listOfFiles[i].getName()+" is : "+ df.format(sim));
+				float sim = SimilarityMeasureUtils.getSimilarity(measure).getScore(listOfFiles[i].getAbsolutePath(),f1.getAbsolutePath());
+				System.out.println("Similarity between queryFile and " + listOfFiles[i].getName()+" is : "+ df.format(sim));
 				SimilarityDomain simObj = new SimilarityDomain();
 				simObj.setQueryFile(queryFile);
 				simObj.setSimFile(listOfFiles[i].getName());

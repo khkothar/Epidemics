@@ -15,7 +15,15 @@ import edu.asu.mwdb.epidemics.similarity.WordSimilarity;
 
 public class Task1 {
 	public static void main(String args[]){
-		try {
+		try {			
+			boolean wrongArg = false;
+			if(args.length != 3)
+				wrongArg = true;
+			if(wrongArg){
+				System.err.println("Please enter correct command line arguments:");
+				System.err.println("Usage: Task1 <File 1 Path> <File 2 Path)> <The Similarity Measure(Enter 1 to 8 for tasks a-h)>");
+				System.exit(0);
+			}
 			String file1 = args[0];
 			String file2 = args[1];
 			int similarityMeasure = Integer.parseInt(args[2]);

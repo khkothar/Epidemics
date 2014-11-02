@@ -39,7 +39,7 @@ public class TimeSeriesSearch {
 				//File f2 = new File(listOfFiles[i].getAbsolutePath());
 				//float sim = getSimilarity(f1.getName(), listOfFiles[i].getName(), measure);
 				float sim = SimilarityMeasureUtils.getSimilarity(measure).getScore(f1.getAbsolutePath(), listOfFiles[i].getAbsolutePath());
-				System.out.println("Similarity between queryFile and " + listOfFiles[i].getName()+" is : "+ df.format(sim));
+				//System.out.println("Similarity between queryFile and " + listOfFiles[i].getName()+" is : "+ df.format(sim));
 				SimilarityDomain simObj = new SimilarityDomain();
 				simObj.setQueryFile(queryFile);
 				simObj.setSimFile(listOfFiles[i].getName());

@@ -24,6 +24,9 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 		Set<Window> uniqueWindows = new LinkedHashSet<Window>();
 		Map<Window, List<Id>> wordOccuranceMapForFile1 = new LinkedHashMap<Window, List<Id>>();
 		Map<Window, List<Id>> wordOccuranceMapForFile2 = new LinkedHashMap<Window, List<Id>>();
+		
+		File file1 = new File(fileName1);
+		File file2 = new File(fileName2);
 
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"simulation dictionary/epidemic_word_file_diff.csv")));
@@ -32,7 +35,7 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 
 		while ((line = br.readLine()) != null) {
 			Word word = new Word(line);
-			if (word.getId().getFileName().equals(fileName1)) {
+			if (word.getId().getFileName().equals(file1.getName())) {
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile1.containsKey(word.getWindow())) {
 					wordOccuranceMapForFile1.get(word.getWindow()).add(
@@ -45,7 +48,7 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 				}
 			}
 			
-			if (word.getId().getFileName().equals(fileName2)) {
+			if (word.getId().getFileName().equals(file2.getName())) {
 				flag = true;
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
@@ -66,7 +69,7 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 					"query dictionary/epidemic_word_file_diff.csv")));
 			while ((line = br.readLine()) != null) {
 				Word word = new Word(line);
-				if (word.getId().getFileName().equals(fileName2)) {
+				if (word.getId().getFileName().equals(file2.getName())) {
 					uniqueWindows.add(word.getWindow());
 					if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
 						wordOccuranceMapForFile2.get(word.getWindow()).add(

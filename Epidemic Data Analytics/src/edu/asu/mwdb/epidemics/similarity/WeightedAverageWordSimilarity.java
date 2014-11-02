@@ -24,6 +24,9 @@ public class WeightedAverageWordSimilarity extends WeightedWordSimilarity implem
 		Map<Window, List<Id>> wordOccuranceMapForFile1 = new LinkedHashMap<Window, List<Id>>();
 		Map<Window, List<Id>> wordOccuranceMapForFile2 = new LinkedHashMap<Window, List<Id>>();
 
+		File file1 = new File(fileName1);
+		File file2 = new File(fileName2);
+		
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"simulation dictionary/epidemic_word_file_avg.csv")));
 
@@ -31,7 +34,7 @@ public class WeightedAverageWordSimilarity extends WeightedWordSimilarity implem
 
 		while ((line = br.readLine()) != null) {
 			Word word = new Word(line);
-			if (word.getId().getFileName().equals(fileName1)) {
+			if (word.getId().getFileName().equals(file1.getName())) {
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile1.containsKey(word.getWindow())) {
 					wordOccuranceMapForFile1.get(word.getWindow()).add(
@@ -44,7 +47,7 @@ public class WeightedAverageWordSimilarity extends WeightedWordSimilarity implem
 				}
 			}
 			
-			if (word.getId().getFileName().equals(fileName2)) {
+			if (word.getId().getFileName().equals(file2.getName())) {
 				flag = true;
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
@@ -65,7 +68,7 @@ public class WeightedAverageWordSimilarity extends WeightedWordSimilarity implem
 					"query dictionary/epidemic_word_file_avg.csv")));
 			while ((line = br.readLine()) != null) {
 				Word word = new Word(line);
-				if (word.getId().getFileName().equals(fileName2)) {
+				if (word.getId().getFileName().equals(file2.getName())) {
 					uniqueWindows.add(word.getWindow());
 					if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
 						wordOccuranceMapForFile2.get(word.getWindow()).add(

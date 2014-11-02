@@ -19,17 +19,21 @@ public class DifferenceWordSimilarity implements Similarity {
 		boolean flag = false;
 		s1 = new HashSet<Window>();
 		s2 = new HashSet<Window>();
+		
+		File file1 = new File(f1);
+		File file2 = new File(f2);
+		
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"simulation dictionary/epidemic_word_file_diff.csv")));
 		String line = "";
 
 		while ((line = br.readLine()) != null) {
 			Word word = new Word(line);
-			if (word.getId().getFileName().equals(f1)) {
+			if (word.getId().getFileName().equals(file1.getName())) {
 				s1.add(word.getWindow());
 			} 
 			
-			if (word.getId().getFileName().equals(f2)) {
+			if (word.getId().getFileName().equals(file2.getName())) {
 				s2.add(word.getWindow());
 				flag = true;
 			}
@@ -41,7 +45,7 @@ public class DifferenceWordSimilarity implements Similarity {
 					"query dictionary/epidemic_word_file_diff.csv")));
 			while ((line = br.readLine()) != null) {
 				Word word = new Word(line);
-				if (word.getId().getFileName().equals(f2)) {
+				if (word.getId().getFileName().equals(file2.getName())) {
 					s2.add(word.getWindow());
 				}
 			}

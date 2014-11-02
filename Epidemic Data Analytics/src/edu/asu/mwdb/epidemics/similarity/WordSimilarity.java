@@ -14,12 +14,6 @@ public class WordSimilarity implements Similarity {
 
 	private Set<Window> s1, s2;
 	
-	public static void main(String[] args) throws Exception {
-		Similarity sim = new WordSimilarity();
-		System.out.println(sim.getScore("1.csv", "1.csv"));
-		
-	}
-
 	@Override
 	public float getScore(String f1, String f2) throws IOException {
 

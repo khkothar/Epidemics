@@ -25,7 +25,7 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 		Map<Window, List<Id>> wordOccuranceMapForFile2 = new LinkedHashMap<Window, List<Id>>();
 
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"epidemic_word_file_diff.csv")));
+				"simulation dictionary/epidemic_word_file_diff.csv")));
 
 		String line = "";
 
@@ -43,7 +43,13 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 							occuranceList);
 				}
 			}
-
+		}
+		br.close();
+		
+		br = new BufferedReader(new FileReader(new File(
+				"query dictionary/epidemic_word_file_diff.csv")));
+		while ((line = br.readLine()) != null) {
+			Word word = new Word(line);
 			if (word.getId().getFileName().equals(fileName2)) {
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
@@ -70,7 +76,7 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 				wordOccuranceMapForFile1, wordOccuranceMapForFile2,
 				uniqueWindows);
 		
-		return matrixMultiplications(binaryVector1, binaryVector2, A);
+		return matrixMultiplications(binaryVector1, binaryVector2, A)/uniqueWindows.size();
 	}
 
 }

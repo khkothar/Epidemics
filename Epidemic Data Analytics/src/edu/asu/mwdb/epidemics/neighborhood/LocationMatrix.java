@@ -15,6 +15,8 @@ public class LocationMatrix {
 	private Map<State, List<State>> neighborMap;
 	private List<State> stateList;
 	
+	List<int[]> shortestDistance;
+	
 	public LocationMatrix(String fileName) throws IOException {
 		File locationFile = new File(fileName);
 		if(locationFile.exists()) {
@@ -23,7 +25,43 @@ public class LocationMatrix {
 			BufferedReader br = new BufferedReader(new FileReader(locationFile));
 			setNeighborhoodMap(br);
 			br.close();
+		} else {
+			throw new IOException("LocationMatrix.csv does not exist in the workspace");
 		}
+		
+		File shortestDistanceFile = new File("StateDistance.csv");
+		
+		if(shortestDistanceFile.exists()) {
+			shortestDistance = new ArrayList<int[]>();
+			setShortestDistanceMatrix(shortestDistanceFile);
+		} else {
+			throw new IOException("StateDistace.csv does not exist in the workspace");
+		}
+	}
+
+	private void setShortestDistanceMatrix(File shortestDistanceFile) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(shortestDistanceFile));
+		String line = br.readLine();
+		
+		while((line = br.readLine()) != null) {
+			String[] distancesAsString = line.split(",");
+			int[] distancesAsInt = new int[distancesAsString.length - 1];
+			int i = -1;
+			for(String distance : distancesAsString) {
+				if(i == -1) {
+					i = 0;
+					continue;
+				}
+				if(!distance.equals("100"))
+					distancesAsInt[i++] = Integer.parseInt(distance);
+				else
+					distancesAsInt[i++] = Integer.MAX_VALUE;
+			}
+			
+			shortestDistance.add(distancesAsInt);
+		}
+		
+		br.close();
 	}
 
 	private void setNeighborhoodMap(BufferedReader br) throws IOException {
@@ -56,5 +94,9 @@ public class LocationMatrix {
 	
 	public List<State> getNeighbors(State state) {
 		return neighborMap.get(state);
+	}
+	
+	public int getShortestDistance(State s1, State s2) {
+		return shortestDistance.get(s1.ordinal())[s2.ordinal()];
 	}
 }

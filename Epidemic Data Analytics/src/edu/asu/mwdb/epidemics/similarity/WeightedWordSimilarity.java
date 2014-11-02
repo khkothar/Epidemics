@@ -21,6 +21,12 @@ import edu.asu.mwdb.epidemics.neighborhood.LocationMatrix;
 
 public class WeightedWordSimilarity implements Similarity {
 	
+	private LocationMatrix locationMatrix;
+	
+	public WeightedWordSimilarity() throws IOException {
+		locationMatrix = new LocationMatrix("LocationMatrix.csv");
+	}
+	
 	@Override
 	public float getScore(String fileName1, String fileName2) throws Exception {
 
@@ -172,7 +178,6 @@ public class WeightedWordSimilarity implements Similarity {
 	private float computeStateTimeWeight(List<Id> occurancesInFile1,
 			List<Id> occurancesInFile2) throws IOException {
 		
-		LocationMatrix locationMatrix = new LocationMatrix("LocationMatrix.csv");
 		int heapSize = occurancesInFile1.size() > occurancesInFile2.size() ? occurancesInFile2
 				.size() : occurancesInFile1.size();
 		PriorityQueue<Float> heap = new PriorityQueue<Float>(heapSize, new MaxHeap());

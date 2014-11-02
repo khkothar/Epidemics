@@ -3,6 +3,7 @@ package edu.asu.mwdb.epidemics.similarity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -15,6 +16,11 @@ import edu.asu.mwdb.epidemics.domain.Window;
 import edu.asu.mwdb.epidemics.domain.Word;
 
 public class WeightedAverageWordSimilarity extends WeightedWordSimilarity implements Similarity {
+
+	public WeightedAverageWordSimilarity() throws IOException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public float getScore(String fileName1, String fileName2) throws Exception {

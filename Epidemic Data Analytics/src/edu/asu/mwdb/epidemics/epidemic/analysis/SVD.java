@@ -190,7 +190,7 @@ public class SVD {
 			System.out.println("Matrix file created !!");
 			s.svDecomposition(5,false);
 			System.out.println("SVD matrices created!!");
-			s.createLatentSemanticScoreFile("Data/U.csv","Data/SemanticScore.csv",fileNameAccessList, -1);
+			s.createLatentSemanticScoreFile("Data/U.csv","Data/SVDSemanticScore.csv",fileNameAccessList, -1);
 			System.out.println("Score file created !!!");
 			
 		} catch(Exception e) {

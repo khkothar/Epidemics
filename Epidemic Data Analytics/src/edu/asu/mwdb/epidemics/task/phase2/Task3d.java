@@ -6,12 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
-import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
 import edu.asu.mwdb.epidemics.domain.Window;
 import edu.asu.mwdb.epidemics.domain.Word;
 import edu.asu.mwdb.epidemics.epidemic.analysis.SVD;

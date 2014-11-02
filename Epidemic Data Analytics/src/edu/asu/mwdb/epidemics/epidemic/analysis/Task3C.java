@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.asu.mwdb.epidemics.epidemic.analysis;
 
 import java.io.BufferedWriter;

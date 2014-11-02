@@ -4,10 +4,12 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
+
+//import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
 import edu.asu.mwdb.epidemics.similarity.AverageWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DifferenceWordSimilarity;
@@ -28,14 +30,16 @@ public class TimeSeriesSearch {
 	 * Returns the list of k similar simulations
 	 */		
 		public List<String> getKSimilarSimulations(String queryFile, String simulationDir, int k, SimilarityMeasure measure) throws Exception{
-			ValueComparator comparator = new ValueComparator(new SimilarityDomain());
+			ValueComparator comparator = new ValueComparator();
 			PriorityQueue<SimilarityDomain> priorityQue = new PriorityQueue<SimilarityDomain>(k, comparator);
 			DecimalFormat df = new DecimalFormat("#.#########");
 			File folder = new File(simulationDir);
 			File[] listOfFiles = folder.listFiles();
 			List<String> kSimilarSims = new ArrayList<String>();
 			for(int i = 0; i < listOfFiles.length; i++){
-				float sim = getSimilarity(queryFile, listOfFiles[i].getAbsolutePath(), measure);
+				File f1 = new File(queryFile);
+				//File f2 = new File(listOfFiles[i].getAbsolutePath());
+				float sim = getSimilarity(f1.getName(), listOfFiles[i].getName(), measure);
 				System.out.println("Similarity between queryFile and " + listOfFiles[i].getName()+" is : "+ df.format(sim));
 				SimilarityDomain simObj = new SimilarityDomain();
 				simObj.setQueryFile(queryFile);
@@ -84,5 +88,61 @@ public class TimeSeriesSearch {
 			default:
 				return 0;
 			}
+		}
+		
+		private class SimilarityDomain {
+			private String queryFile;
+			private String simFile;
+			private float similarity;
+			/**
+			 * @return the queryFile
+			 */
+			public String getQueryFile() {
+				return queryFile;
+			}
+			/**
+			 * @param queryFile the queryFile to set
+			 */
+			public void setQueryFile(String queryFile) {
+				this.queryFile = queryFile;
+			}
+			/**
+			 * @return the simFile
+			 */
+			public String getSimFile() {
+				return simFile;
+			}
+			/**
+			 * @param simFile the simFile to set
+			 */
+			public void setSimFile(String simFile) {
+				this.simFile = simFile;
+			}
+			/**
+			 * @return the similarity
+			 */
+			public float getSimilarity() {
+				return similarity;
+			}
+			/**
+			 * @param similarity the similarity to set
+			 */
+			public void setSimilarity(float similarity) {
+				this.similarity = similarity;
+			}
+			
+		}
+		
+		private class ValueComparator implements Comparator<SimilarityDomain> {
+		    /**
+		     * compare overrides the compare function of Comparator class
+		     */
+		    public int compare(SimilarityDomain file1, SimilarityDomain file2) {
+		        if (file1.getSimilarity() <= file2.getSimilarity()) {
+		            return -1;
+		        } else {
+		            return 1;
+		        }
+		    }
 		}
 }

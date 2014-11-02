@@ -22,14 +22,16 @@ public class WordSimilarity implements Similarity {
 				"simulation dictionary/epidemic_word_file.csv")));
 		String line = "";
 		boolean flag = false; 
+		File file1 = new File(f1);
+		File file2 = new File(f2);
 
 		while ((line = br.readLine()) != null) {
 			Word word = new Word(line);
-			if (word.getId().getFileName().equals(f1)) {
+			if (word.getId().getFileName().equals(file1.getName())) {
 				s1.add(word.getWindow());
 			}
 			
-			if (word.getId().getFileName().equals(f2)) {
+			if (word.getId().getFileName().equals(file2.getName())) {
 				s2.add(word.getWindow());
 				flag = true;
 			}
@@ -41,7 +43,7 @@ public class WordSimilarity implements Similarity {
 					"query dictionary/epidemic_word_file.csv")));
 			while ((line = br.readLine()) != null) {
 				Word word = new Word(line);
-				if (word.getId().getFileName().equals(f2)) {
+				if (word.getId().getFileName().equals(file2.getName())) {
 					s2.add(word.getWindow());
 				}
 			}

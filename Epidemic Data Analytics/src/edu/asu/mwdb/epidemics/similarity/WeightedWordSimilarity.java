@@ -24,6 +24,7 @@ public class WeightedWordSimilarity implements Similarity {
 	@Override
 	public float getScore(String fileName1, String fileName2) throws Exception {
 
+		boolean flag = false;
 		Set<Window> uniqueWindows = new LinkedHashSet<Window>();
 		Map<Window, List<Id>> wordOccuranceMapForFile1 = new LinkedHashMap<Window, List<Id>>();
 		Map<Window, List<Id>> wordOccuranceMapForFile2 = new LinkedHashMap<Window, List<Id>>();
@@ -47,14 +48,9 @@ public class WeightedWordSimilarity implements Similarity {
 							occuranceList);
 				}
 			}
-		}
-		br.close();
-		
-		br = new BufferedReader(new FileReader(new File(
-				"query dictionary/epidemic_word_file.csv")));
-		while ((line = br.readLine()) != null) {
-			Word word = new Word(line);
+			
 			if (word.getId().getFileName().equals(fileName2)) {
+				flag = true;
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
 					wordOccuranceMapForFile2.get(word.getWindow()).add(
@@ -68,6 +64,27 @@ public class WeightedWordSimilarity implements Similarity {
 			}
 		}
 		br.close();
+		
+		if( !flag ) {
+			br = new BufferedReader(new FileReader(new File(
+					"query dictionary/epidemic_word_file.csv")));
+			while ((line = br.readLine()) != null) {
+				Word word = new Word(line);
+				if (word.getId().getFileName().equals(fileName2)) {
+					uniqueWindows.add(word.getWindow());
+					if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
+						wordOccuranceMapForFile2.get(word.getWindow()).add(
+								word.getId());
+					} else {
+						List<Id> occuranceList = new ArrayList<Id>();
+						occuranceList.add(word.getId());
+						wordOccuranceMapForFile2.put(word.getWindow(),
+								occuranceList);
+					}
+				}
+			}
+			br.close();
+		}
 
 		int[] binaryVector1 = new int[uniqueWindows.size()];
 		createBinaryVector(binaryVector1, wordOccuranceMapForFile1,

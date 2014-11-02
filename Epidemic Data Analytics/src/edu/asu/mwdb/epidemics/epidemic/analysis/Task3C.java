@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
-
 import edu.asu.mwdb.epidemics.similarity.AverageWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DifferenceWordSimilarity;
@@ -112,9 +110,9 @@ public class Task3C {
 		createInputMatrixToFileForSVD(simSimMatrix);
 		System.out.println("Matrix file created 3C!!! ");
 		SVD svd = new SVD();
-		svd.svDecomposition(r);
+		svd.svDecomposition(r,false);
 		System.out.println("SVD matrices created!!");
-		svd.createLatentSemanticScoreFile("Data/SemanticScore3C.csv",fileNameList);
+		svd.createLatentSemanticScoreFile("Data/U.csv","Data/SemanticScore3C.csv",fileNameList, -1);
 		System.out.println("Score file created !!!");
 	}
 

@@ -123,7 +123,7 @@ public class SVD {
 	}
 	
 	// Creating list of Score objects in decreasing order of score.
-	private List<List<Score>> getLatentSemanticSimulationScores() throws Exception {
+	private List<List<Score>> getLatentSemanticSimulationScores(List<String> fileNameList) throws Exception {
 		
 		BufferedReader bufReader = new BufferedReader(new FileReader(new File("Data/U.csv")));
 		List<List<Score>> resultList = new ArrayList<>();
@@ -134,7 +134,7 @@ public class SVD {
 		
 		for(int i =0; i < arrayLine.length ; i++) {
 			List<Score> list = new ArrayList<>();
-			Score s = new Score(fileNameAccessList.get(rowIndex),Double.parseDouble(arrayLine[i]));
+			Score s = new Score(fileNameList.get(rowIndex),Double.parseDouble(arrayLine[i]));
 			list.add(s);
 			resultList.add(list);
 		}
@@ -143,7 +143,7 @@ public class SVD {
 			String[] tempArray = line.split(",");
 			for (int i = 0; i < tempArray.length; i++) {
 				tempList = resultList.remove(i);
-				Score s = new Score(fileNameAccessList.get(rowIndex),Double.parseDouble(tempArray[i]));
+				Score s = new Score(fileNameList.get(rowIndex),Double.parseDouble(tempArray[i]));
 				tempList.add(s);
 				resultList.add(i, tempList);
 			}
@@ -159,10 +159,10 @@ public class SVD {
 	}
 	
 	//Writing to Latent Semantic Score file.
-	public void createLatentSemanticScoreFile() throws Exception {
+	public void createLatentSemanticScoreFile(String outFile, List<String> fileNameList) throws Exception {
 		
-		List<List<Score>> outList = getLatentSemanticSimulationScores();
-		BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/SemanticScore.csv"));
+		List<List<Score>> outList = getLatentSemanticSimulationScores(fileNameList);
+		BufferedWriter bufWriter = new BufferedWriter(new FileWriter(outFile));
 		int semanticIndex = 1;
 		
 		for (List<Score> list : outList) {
@@ -178,6 +178,9 @@ public class SVD {
 		
 	}
 	
+	public void computeSVD() {
+		
+	}
 	public static void main(String[] args) {
 		SVD s = new SVD();
 		
@@ -186,7 +189,7 @@ public class SVD {
 			System.out.println("Matrix file created !!");
 			s.svDecomposition(5);
 			System.out.println("SVD matrices created!!");
-			s.createLatentSemanticScoreFile();
+			s.createLatentSemanticScoreFile("Data/SemanticScore.csv",fileNameAccessList);
 			System.out.println("Score file created !!!");
 			
 		} catch(Exception e) {

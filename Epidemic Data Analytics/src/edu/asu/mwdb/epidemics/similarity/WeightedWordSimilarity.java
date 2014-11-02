@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -19,16 +20,17 @@ import edu.asu.mwdb.epidemics.domain.Word;
 import edu.asu.mwdb.epidemics.neighborhood.LocationMatrix;
 
 public class WeightedWordSimilarity implements Similarity {
-
+	
 	@Override
 	public float getScore(String fileName1, String fileName2) throws Exception {
 
+		boolean flag = false;
 		Set<Window> uniqueWindows = new LinkedHashSet<Window>();
 		Map<Window, List<Id>> wordOccuranceMapForFile1 = new LinkedHashMap<Window, List<Id>>();
 		Map<Window, List<Id>> wordOccuranceMapForFile2 = new LinkedHashMap<Window, List<Id>>();
 
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"epidemic_word_file.csv")));
+				"simulation dictionary/epidemic_word_file.csv")));
 
 		String line = "";
 
@@ -46,8 +48,9 @@ public class WeightedWordSimilarity implements Similarity {
 							occuranceList);
 				}
 			}
-
+			
 			if (word.getId().getFileName().equals(fileName2)) {
+				flag = true;
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
 					wordOccuranceMapForFile2.get(word.getWindow()).add(
@@ -61,6 +64,27 @@ public class WeightedWordSimilarity implements Similarity {
 			}
 		}
 		br.close();
+		
+		if( !flag ) {
+			br = new BufferedReader(new FileReader(new File(
+					"query dictionary/epidemic_word_file.csv")));
+			while ((line = br.readLine()) != null) {
+				Word word = new Word(line);
+				if (word.getId().getFileName().equals(fileName2)) {
+					uniqueWindows.add(word.getWindow());
+					if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
+						wordOccuranceMapForFile2.get(word.getWindow()).add(
+								word.getId());
+					} else {
+						List<Id> occuranceList = new ArrayList<Id>();
+						occuranceList.add(word.getId());
+						wordOccuranceMapForFile2.put(word.getWindow(),
+								occuranceList);
+					}
+				}
+			}
+			br.close();
+		}
 
 		int[] binaryVector1 = new int[uniqueWindows.size()];
 		createBinaryVector(binaryVector1, wordOccuranceMapForFile1,
@@ -73,22 +97,23 @@ public class WeightedWordSimilarity implements Similarity {
 				wordOccuranceMapForFile1, wordOccuranceMapForFile2,
 				uniqueWindows);
 		
-		return matrixMultiplications(binaryVector1, binaryVector2, A);
+		return matrixMultiplications(binaryVector1, binaryVector2, A)/uniqueWindows.size();
 	}
 
 	protected float matrixMultiplications(int[] binaryVector1, int[] binaryVector2, float[][] A) {
+		float intermediate[] = new float[binaryVector1.length];
 		for(int i = 0; i < binaryVector1.length; i++) {
 			int val = binaryVector1[i];
-			binaryVector1[i] = 0;
+			intermediate[i] = 0;
 			for(int j = 0; j < A.length; j++) {
-				binaryVector1[i] += val * A[j][i];
+				intermediate[i] += val * A[j][i];
 			}
 		}
 		
 		float score = 0;
 		
-		for(int i = 0; i < binaryVector1.length; i++) {
-				score += binaryVector1[i] * binaryVector2[i];
+		for(int i = 0; i < intermediate.length; i++) {
+				score += intermediate[i] * binaryVector2[i];
 		}
 		
 		return score;
@@ -113,13 +138,14 @@ public class WeightedWordSimilarity implements Similarity {
 			Map<Window, List<Id>> wordOccuranceMapForFile2,
 			Set<Window> uniqueWindows) throws IOException {
 		int n = binaryVector1.length;
-		Iterator<Window> itr1 = uniqueWindows.iterator();
+		Iterator<Window> itr1 = wordOccuranceMapForFile1.keySet().iterator();
 		float[][] A = new float[n][n];
 		for (int i = 0; i < n; i++) {
+			if(binaryVector1[i] == 0) continue;
 			Window w1 = itr1.next();
-			Iterator<Window> itr2 = uniqueWindows.iterator();
+			Iterator<Window> itr2 = wordOccuranceMapForFile2.keySet().iterator();
 			for (int j = 0; j < n; j++) {
-				if (binaryVector1[i] == 1 && binaryVector2[j] == 1) {
+				if (binaryVector2[j] == 1) {
 					Window w2 = itr2.next();
 					A[i][j] = computeWeight(w1, w2,
 							wordOccuranceMapForFile1.get(w1),
@@ -144,32 +170,41 @@ public class WeightedWordSimilarity implements Similarity {
 			List<Id> occurancesInFile2) throws IOException {
 		
 		LocationMatrix locationMatrix = new LocationMatrix("LocationMatrix.csv");
-		PriorityQueue<Float> heap = new PriorityQueue<Float>(
-				occurancesInFile1.size() > occurancesInFile2.size() ? occurancesInFile2
-						.size() : occurancesInFile1.size());
+		int heapSize = occurancesInFile1.size() > occurancesInFile2.size() ? occurancesInFile2
+				.size() : occurancesInFile1.size();
+		PriorityQueue<Float> heap = new PriorityQueue<Float>(heapSize, new MaxHeap());
 		
 		for (int i = 0; i < occurancesInFile1.size(); i++) {
 			for (int j = 0; j < occurancesInFile2.size(); j++) {
-				float timeFactor = 1 / (1 + Math
+				float timeFactor = 1.0f / (1.0f + Math
 						.abs((Integer.parseInt(occurancesInFile1.get(i)
 								.getIteration()) - Integer
 								.parseInt(occurancesInFile2.get(j)
 										.getIteration()))));
-				float stateFactor = (float) (1 / (1 + Math.pow(locationMatrix
+				int stateDistance = locationMatrix
 						.getShortestDistance(occurancesInFile1.get(i)
 								.getState(), occurancesInFile2.get(j)
-								.getState()), 2)));
+								.getState());
+				float stateFactor = 0;
+				if(stateDistance != Integer.MAX_VALUE) {
+					stateFactor = (float) (1.0f / (1.0f + Math.pow(stateDistance, 2)));
+				}
+				if(heap.size() == heapSize) {
+					//remove lowest element
+					heap.poll();
+				}
 				heap.offer(timeFactor * stateFactor);
 			}
 		}
 
 		float sum = 0.0f;
 		
-		for(int i = 0; i < heap.size(); i++) {
+		for(int i = 0; i < heapSize; i++) {
 			sum += heap.poll();
 		}
 		
-		return sum/heap.size();
+		return sum/(occurancesInFile1.size() < occurancesInFile2.size() ? occurancesInFile2
+				.size() : occurancesInFile1.size());
 	}
 
 	private float computeDistanceBetweenWords(Window w1, Window w2) {
@@ -178,6 +213,15 @@ public class WeightedWordSimilarity implements Similarity {
 			distance += Math.pow((w1.getValues()[i] - w2.getValues()[i]), 2);
 		}
 		return 1.0f / (1.0f + distance);
+	}
+	
+	private class MaxHeap implements Comparator<Float> {
+
+		@Override
+		public int compare(Float o1, Float o2) {
+			return o1 >= o2 ? 1 : -1;
+		}
+		
 	}
 
 }

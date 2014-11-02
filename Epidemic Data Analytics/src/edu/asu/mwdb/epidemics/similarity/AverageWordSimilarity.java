@@ -17,6 +17,7 @@ public class AverageWordSimilarity implements Similarity {
 	@Override
 	public float getScore(String f1, String f2) throws IOException {
 		
+		boolean flag = false;
 		s1 = new HashSet<Window>();
 		s2 = new HashSet<Window>();
 		BufferedReader br = new BufferedReader(new FileReader(new File(
@@ -28,18 +29,25 @@ public class AverageWordSimilarity implements Similarity {
 			if (word.getId().getFileName().equals(f1)) {
 				s1.add(word.getWindow());
 			} 
-		}
-		br.close();
-		
-		br = new BufferedReader(new FileReader(new File(
-				"query dictionary/epidemic_word_file_avg.csv")));
-		while ((line = br.readLine()) != null) {
-			Word word = new Word(line);
+			
 			if (word.getId().getFileName().equals(f2)) {
 				s2.add(word.getWindow());
+				flag = true;
 			}
 		}
 		br.close();
+		
+		while(!flag) {
+			br = new BufferedReader(new FileReader(new File(
+					"query dictionary/epidemic_word_file_avg.csv")));
+			while ((line = br.readLine()) != null) {
+				Word word = new Word(line);
+				if (word.getId().getFileName().equals(f2)) {
+					s2.add(word.getWindow());
+				}
+			}
+			br.close();
+		}
 		
 		Set<Window> cloneS1 = new HashSet<Window>(s1);
 		cloneS1.retainAll(s2);

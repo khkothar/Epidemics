@@ -14,12 +14,6 @@ public class WordSimilarity implements Similarity {
 
 	private Set<Window> s1, s2;
 	
-	public static void main(String[] args) throws Exception {
-		Similarity sim = new WordSimilarity();
-		System.out.println(sim.getScore("1.csv", "1.csv"));
-		
-	}
-
 	@Override
 	public float getScore(String f1, String f2) throws IOException {
 
@@ -28,24 +22,32 @@ public class WordSimilarity implements Similarity {
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"simulation dictionary/epidemic_word_file_diff.csv")));
 		String line = "";
+		boolean flag = false; 
 
 		while ((line = br.readLine()) != null) {
 			Word word = new Word(line);
 			if (word.getId().getFileName().equals(f1)) {
 				s1.add(word.getWindow());
-			} 
-		}
-		br.close();
-		
-		br = new BufferedReader(new FileReader(new File(
-				"query dictionary/epidemic_word_file_diff.csv")));
-		while ((line = br.readLine()) != null) {
-			Word word = new Word(line);
+			}
+			
 			if (word.getId().getFileName().equals(f2)) {
 				s2.add(word.getWindow());
+				flag = true;
 			}
 		}
 		br.close();
+		
+		if(!flag) {
+			br = new BufferedReader(new FileReader(new File(
+					"query dictionary/epidemic_word_file_diff.csv")));
+			while ((line = br.readLine()) != null) {
+				Word word = new Word(line);
+				if (word.getId().getFileName().equals(f2)) {
+					s2.add(word.getWindow());
+				}
+			}
+			br.close();
+		}
 		
 		Set<Window> cloneS1 = new HashSet<Window>(s1);
 		cloneS1.retainAll(s2);

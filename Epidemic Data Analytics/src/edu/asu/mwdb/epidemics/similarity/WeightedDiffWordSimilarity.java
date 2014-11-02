@@ -20,12 +20,13 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 	@Override
 	public float getScore(String fileName1, String fileName2) throws Exception {
 
+		boolean flag = false;
 		Set<Window> uniqueWindows = new LinkedHashSet<Window>();
 		Map<Window, List<Id>> wordOccuranceMapForFile1 = new LinkedHashMap<Window, List<Id>>();
 		Map<Window, List<Id>> wordOccuranceMapForFile2 = new LinkedHashMap<Window, List<Id>>();
 
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"epidemic_word_file_diff.csv")));
+				"simulation dictionary/epidemic_word_file_diff.csv")));
 
 		String line = "";
 
@@ -43,8 +44,9 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 							occuranceList);
 				}
 			}
-
+			
 			if (word.getId().getFileName().equals(fileName2)) {
+				flag = true;
 				uniqueWindows.add(word.getWindow());
 				if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
 					wordOccuranceMapForFile2.get(word.getWindow()).add(
@@ -58,6 +60,27 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 			}
 		}
 		br.close();
+		
+		if( !flag ) {
+			br = new BufferedReader(new FileReader(new File(
+					"query dictionary/epidemic_word_file_diff.csv")));
+			while ((line = br.readLine()) != null) {
+				Word word = new Word(line);
+				if (word.getId().getFileName().equals(fileName2)) {
+					uniqueWindows.add(word.getWindow());
+					if (wordOccuranceMapForFile2.containsKey(word.getWindow())) {
+						wordOccuranceMapForFile2.get(word.getWindow()).add(
+								word.getId());
+					} else {
+						List<Id> occuranceList = new ArrayList<Id>();
+						occuranceList.add(word.getId());
+						wordOccuranceMapForFile2.put(word.getWindow(),
+								occuranceList);
+					}
+				}
+			}
+			br.close();
+		}
 
 		int[] binaryVector1 = new int[uniqueWindows.size()];
 		createBinaryVector(binaryVector1, wordOccuranceMapForFile1,
@@ -70,7 +93,7 @@ public class WeightedDiffWordSimilarity extends WeightedWordSimilarity
 				wordOccuranceMapForFile1, wordOccuranceMapForFile2,
 				uniqueWindows);
 		
-		return matrixMultiplications(binaryVector1, binaryVector2, A);
+		return matrixMultiplications(binaryVector1, binaryVector2, A)/uniqueWindows.size();
 	}
 
 }

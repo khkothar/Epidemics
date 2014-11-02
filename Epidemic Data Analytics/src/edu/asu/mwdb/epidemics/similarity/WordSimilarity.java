@@ -13,14 +13,13 @@ import edu.asu.mwdb.epidemics.domain.Word;
 public class WordSimilarity implements Similarity {
 
 	private Set<Window> s1, s2;
-	
 	@Override
 	public float getScore(String f1, String f2) throws IOException {
 
 		s1 = new HashSet<Window>();
 		s2 = new HashSet<Window>();
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"simulation dictionary/epidemic_word_file_diff.csv")));
+				"simulation dictionary/epidemic_word_file.csv")));
 		String line = "";
 		boolean flag = false; 
 
@@ -39,7 +38,7 @@ public class WordSimilarity implements Similarity {
 		
 		if(!flag) {
 			br = new BufferedReader(new FileReader(new File(
-					"query dictionary/epidemic_word_file_diff.csv")));
+					"query dictionary/epidemic_word_file.csv")));
 			while ((line = br.readLine()) != null) {
 				Word word = new Word(line);
 				if (word.getId().getFileName().equals(f2)) {

@@ -9,4 +9,9 @@ function [U, S, V] = svDecomposition(r)
         csvwrite('./Data/S.csv',S(1:r,1:r));
         csvwrite('./Data/V.csv',V(1:r,:));
     end
+    display(U(:, 1:r));
+    [r,index] = sort(U(:, 1:r),1, 'descend');
+    display(r);
+    display(index);    
+    
 end

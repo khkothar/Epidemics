@@ -24,15 +24,5 @@ public class Task4a {
 		int k = Integer.parseInt(args[2]);
 		List<String> files = Arrays.asList(new File(simFilesPath).list());
 		FastMap fastMap = new FastMap(files, SimilarityMeasureUtils.getSimilarity(SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType)), k);
-		
-		/*
-		 * temporary result print
-		 */
-		for(int i = 0; i < files.size(); i++){
-			System.out.println();
-			for(int j = 0; j < k; j++){
-				System.out.println(fastMap.getReducedMatrix().getMatrix()[i][j]);
-			}
-		}
 	}
 }

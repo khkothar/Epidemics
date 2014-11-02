@@ -14,9 +14,10 @@ public class Pivot {
 	private int getMaxFromRow(float[][] currentMatrix, int index) {
 		float max = currentMatrix[index][0];
 		int returnIndex = 0;
-		for(int i = 1; i < currentMatrix.length; i++){
-			if(currentMatrix[i+index][i] > max){
-				max = currentMatrix[i+index][i];
+		for(int i = 0; i < currentMatrix.length; i++){
+			System.out.println("********************  " + currentMatrix[index][i]+ "  ******************");
+			if(currentMatrix[index][i] > max){
+				max = currentMatrix[index][i];
 				returnIndex = i;
 			}
 		}

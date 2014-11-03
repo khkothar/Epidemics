@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import edu.asu.mwdb.epidemics.similarity.Similarity;
-import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class FastMap {
 	
@@ -28,7 +27,7 @@ public class FastMap {
 			reducedMatrix.addColumn(i, pivot);
 			distanceMatrix.update(reducedMatrix.getMatrix(), pivot);
 		}
-		System.out.println("\ncurrent Matrix");
+		/*System.out.println("\ncurrent Matrix");
 		SimilarityMeasureUtils.printMatrix(distanceMatrix.getCurrentMatrix());
 		System.out.println("\noriginal matrix Matrix");
 		SimilarityMeasureUtils.printMatrix(distanceMatrix.getDistanceMatrixInOriginalSpace());
@@ -37,7 +36,7 @@ public class FastMap {
 		for(int i = 0; i < pivotList.size(); i++){
 			System.out.println("\na : " + pivotList.get(i).getA() + " b : "+ pivotList.get(i).getB());
 		}
-		System.out.println("\nerror between reduced space and original space : "+ getError());
+		System.out.println("\nerror between reduced space and original space : "+ getError());*/
 	}
 	
 	public float getError() {

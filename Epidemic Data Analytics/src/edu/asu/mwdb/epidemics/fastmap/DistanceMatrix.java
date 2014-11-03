@@ -22,8 +22,8 @@ public class DistanceMatrix {
 				if (i == j) {
 					distanceMatrixInOriginalSpace[i][j] = 0;
 				} else {
-					float distance = 1.0f / (1.0f + similarityMeasure.getScore(
-							files.get(i), files.get(j)));
+					float score = similarityMeasure.getScore(files.get(i), files.get(j));
+					float distance = 1.0f/(1 + score);
 					distanceMatrixInOriginalSpace[i][j] = distance;
 					distanceMatrixInOriginalSpace[j][i] = distance;
 				}

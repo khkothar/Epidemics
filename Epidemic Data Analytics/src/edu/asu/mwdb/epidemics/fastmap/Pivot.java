@@ -1,11 +1,15 @@
 package edu.asu.mwdb.epidemics.fastmap;
 
+import java.util.Random;
+
 public class Pivot {
 	private int a;
 	private int b;
 	private float distance;
 	public Pivot(float[][] distMatrix) {
-		a = getMaxFromRow(distMatrix, 0);
+		Random random = new Random();
+		int randomIndex = random.nextInt(distMatrix.length);
+		a = getMaxFromRow(distMatrix, randomIndex);
 		b = getMaxFromRow(distMatrix, a);
 		distance = distMatrix[a][b];
 	}

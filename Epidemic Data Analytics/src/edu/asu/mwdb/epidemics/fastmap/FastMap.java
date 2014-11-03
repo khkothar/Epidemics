@@ -35,8 +35,8 @@ public class FastMap {
 		SimilarityMeasureUtils.printMatrix(distanceMatrix.getDistanceMatrixInReducedSpace());
 		for(int i = 0; i < pivotList.size(); i++){
 			System.out.println("\na : " + pivotList.get(i).getA() + " b : "+ pivotList.get(i).getB());
-		}
-		System.out.println("\nerror between reduced space and original space : "+ getError());*/
+		}*/
+		System.out.println("\nerror between reduced space and original space : "+ getError());
 	}
 	
 	public float getError() {

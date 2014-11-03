@@ -37,14 +37,14 @@ public class DistanceMatrix {
 			for (int j = 0; j < reducedMatrix.length; j++) {
 				if (current == 0) {
 					distanceMatrixInReducedSpace[i][j] = (float) Math
-							.sqrt((Math.pow(distanceMatrixInOriginalSpace[i][j], 2) - Math
+							.sqrt(Math.abs((Math.pow(distanceMatrixInOriginalSpace[i][j], 2) - Math
 									.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
-											2)));
+											2))));
 				} else {
 					distanceMatrixInReducedSpace[i][j] = (float) Math
-							.sqrt((Math.pow(distanceMatrixInReducedSpace[i][j], 2) - Math
+							.sqrt(Math.abs((Math.pow(distanceMatrixInReducedSpace[i][j], 2) - Math
 									.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
-											2)));
+											2))));
 				}
 			}
 		}

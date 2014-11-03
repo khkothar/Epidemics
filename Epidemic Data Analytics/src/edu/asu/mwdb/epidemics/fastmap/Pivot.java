@@ -16,7 +16,7 @@ public class Pivot {
 		int returnIndex = 0;
 		for(int i = 0; i < currentMatrix.length; i++){
 			System.out.println("********************  " + currentMatrix[index][i]+ "  ******************");
-			if(currentMatrix[index][i] > max){
+			if(currentMatrix[index][i] >= max){
 				max = currentMatrix[index][i];
 				returnIndex = i;
 			}

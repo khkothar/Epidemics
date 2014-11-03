@@ -1,5 +1,6 @@
 package edu.asu.mwdb.epidemics.fastmap;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import edu.asu.mwdb.epidemics.similarity.Similarity;
@@ -53,12 +54,23 @@ public class DistanceMatrix {
 	}
 
 	public float getProjectedDistance(Pivot pivot, int index) {
+		DecimalFormat df = new DecimalFormat("#.######");
 		if(current == 0) {
+			System.out.println("distanceMatrixInOriginalSpace[pivot.getA()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) + " distanceMatrixInOriginalSpace[pivot.getA()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) 
+					+" pivot.getDistance() : " + pivot.getDistance());
+			
+			System.out.println("distanceMatrixInOriginalSpace[pivot.getB()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) + " distanceMatrixInOriginalSpace[pivot.getB()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) 
+					+" pivot.getDistance() : " + pivot.getDistance());
 			return (distanceMatrixInOriginalSpace[pivot.getA()][index] * distanceMatrixInOriginalSpace[pivot.getA()][index] + 
 					pivot.getDistance() * pivot.getDistance() - 
 					distanceMatrixInOriginalSpace[pivot.getB()][index] * distanceMatrixInOriginalSpace[pivot.getB()][index])
 					/(2.0f * pivot.getDistance());
 		} else {
+			System.out.println("distanceMatrixInOriginalSpace[pivot.getA()][index] : "+ distanceMatrixInOriginalSpace[pivot.getA()][index] + " distanceMatrixInOriginalSpace[pivot.getA()][index]  : "+ distanceMatrixInOriginalSpace[pivot.getA()][index] 
+					+" pivot.getDistance() : " + pivot.getDistance());
+			
+			System.out.println("distanceMatrixInReducedSpace[pivot.getB()][index] : "+ distanceMatrixInReducedSpace[pivot.getB()][index] + " distanceMatrixInReducedSpace[pivot.getB()][index]  : "+ distanceMatrixInReducedSpace[pivot.getB()][index] 
+					+" pivot.getDistance() : " + pivot.getDistance());
 			return (distanceMatrixInReducedSpace[pivot.getA()][index] * distanceMatrixInReducedSpace[pivot.getA()][index] + 
 					pivot.getDistance() * pivot.getDistance() - 
 					distanceMatrixInReducedSpace[pivot.getB()][index] * distanceMatrixInReducedSpace[pivot.getB()][index])

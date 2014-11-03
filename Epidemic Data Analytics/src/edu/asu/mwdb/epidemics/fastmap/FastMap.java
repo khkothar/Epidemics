@@ -18,6 +18,7 @@ public class FastMap {
 	
 	public FastMap(List<String> files, Similarity similarityMeasure, int k) throws Exception {
 		this.files = files;
+		this.similarityMeasure = similarityMeasure;
 		pivotList = new ArrayList<Pivot>();
 		distanceMatrix = new DistanceMatrix(files, similarityMeasure);
 		reducedMatrix = new ReducedMatrix(files.size(), k, distanceMatrix);
@@ -36,7 +37,6 @@ public class FastMap {
 		for(int i = 0; i < pivotList.size(); i++){
 			System.out.println("\na : " + pivotList.get(i).getA() + " b : "+ pivotList.get(i).getB());
 		}
-		
 		System.out.println("\nerror between reduced space and original space : "+ getError());
 	}
 	
@@ -83,13 +83,13 @@ public class FastMap {
 			if(heap.size() == k) {
 				heap.poll();
 			}
-			
 			heap.offer(new Wrapper(Math.abs(reducedMatrix.getMatrix()[i][pivotList.size() - 1] - modifiedDistance), i));
 		}
 		
 		List<String> results = new ArrayList<String>();
 		
 		for(int i = 0; i < k; i++) {
+			System.out.println("sim file " + i + " : " + files.get(heap.peek().index));
 			results.add(files.get(heap.poll().getIndex()));
 		}
 		

@@ -54,27 +54,29 @@ public class DistanceMatrix {
 	}
 
 	public float getProjectedDistance(Pivot pivot, int index) {
-		DecimalFormat df = new DecimalFormat("#.######");
+		DecimalFormat df = new DecimalFormat("#.#########");
 		if(current == 0) {
-			System.out.println("distanceMatrixInOriginalSpace[pivot.getA()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) + " distanceMatrixInOriginalSpace[pivot.getA()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) 
+			System.out.println("distanceMatrixInOriginalSpace[pivot.getA()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) + " distanceMatrixInOriginalSpace[pivot.getB()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) 
 					+" pivot.getDistance() : " + pivot.getDistance());
 			
-			System.out.println("distanceMatrixInOriginalSpace[pivot.getB()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) + " distanceMatrixInOriginalSpace[pivot.getB()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) 
-					+" pivot.getDistance() : " + pivot.getDistance());
-			return (distanceMatrixInOriginalSpace[pivot.getA()][index] * distanceMatrixInOriginalSpace[pivot.getA()][index] + 
+			//System.out.println("distanceMatrixInOriginalSpace[pivot.getB()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) + " distanceMatrixInOriginalSpace[pivot.getB()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getB()][index]) 
+					//+" pivot.getDistance() : " + pivot.getDistance());
+			float temp = (distanceMatrixInOriginalSpace[pivot.getA()][index] * distanceMatrixInOriginalSpace[pivot.getA()][index] + 
 					pivot.getDistance() * pivot.getDistance() - 
 					distanceMatrixInOriginalSpace[pivot.getB()][index] * distanceMatrixInOriginalSpace[pivot.getB()][index])
 					/(2.0f * pivot.getDistance());
+			return temp;
 		} else {
-			System.out.println("distanceMatrixInOriginalSpace[pivot.getA()][index] : "+ distanceMatrixInOriginalSpace[pivot.getA()][index] + " distanceMatrixInOriginalSpace[pivot.getA()][index]  : "+ distanceMatrixInOriginalSpace[pivot.getA()][index] 
-					+" pivot.getDistance() : " + pivot.getDistance());
+//			System.out.println("distanceMatrixInOriginalSpace[pivot.getA()][index] : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) + " distanceMatrixInOriginalSpace[pivot.getA()][index]  : "+ df.format(distanceMatrixInOriginalSpace[pivot.getA()][index]) 
+//					+" pivot.getDistance() : " + pivot.getDistance());
 			
-			System.out.println("distanceMatrixInReducedSpace[pivot.getB()][index] : "+ distanceMatrixInReducedSpace[pivot.getB()][index] + " distanceMatrixInReducedSpace[pivot.getB()][index]  : "+ distanceMatrixInReducedSpace[pivot.getB()][index] 
+			System.out.println("distanceMatrixInReducedSpace[pivot.getA()][index] : "+ df.format(distanceMatrixInReducedSpace[pivot.getA()][index]) + " distanceMatrixInReducedSpace[pivot.getB()][index]  : "+ df.format(distanceMatrixInReducedSpace[pivot.getB()][index]) 
 					+" pivot.getDistance() : " + pivot.getDistance());
-			return (distanceMatrixInReducedSpace[pivot.getA()][index] * distanceMatrixInReducedSpace[pivot.getA()][index] + 
+			float temp2 = (distanceMatrixInReducedSpace[pivot.getA()][index] * distanceMatrixInReducedSpace[pivot.getA()][index] + 
 					pivot.getDistance() * pivot.getDistance() - 
 					distanceMatrixInReducedSpace[pivot.getB()][index] * distanceMatrixInReducedSpace[pivot.getB()][index])
 					/(2.0f * pivot.getDistance());
+			return temp2;
 		}
 	}
 

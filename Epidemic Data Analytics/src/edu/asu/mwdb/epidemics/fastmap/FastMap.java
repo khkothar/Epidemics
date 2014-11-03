@@ -67,8 +67,8 @@ public class FastMap {
 			Pivot pivot = pivotList.get(i);
 			float qa, qb, ab;
 			if(i == 0) {
-				qa = similarityMeasure.getScore(files.get(pivot.getA()), query);
-				qb = similarityMeasure.getScore(files.get(pivot.getB()), query);
+				qa = (1.0f/1.0f + similarityMeasure.getScore(files.get(pivot.getA()), query));
+				qb = (1.0f/1.0f + similarityMeasure.getScore(files.get(pivot.getB()), query));
 				ab = pivot.getDistance();
 			} else {
 				qa = reducedMatrix.getMatrix()[pivot.getA()][i - 1] - modifiedDistance;

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,10 +34,10 @@ public class LDA {
 	private static List<String> fileNameAccessList = new ArrayList<>();
 	
 	//Function for generating the Map from given epidemic word file.
-	private Map<Window, List<Id>> getEpidemicWordMap(String fileName) throws Exception {
+	private LinkedHashMap<Window, List<Id>> getEpidemicWordMap(String fileName) throws Exception {
 		BufferedReader br = new BufferedReader(new FileReader(new File(fileName)));
 		String line = "";
-		Map<Window,List<Id>> wordFileMap = new HashMap<>();
+		LinkedHashMap<Window,List<Id>> wordFileMap = new LinkedHashMap<>();
 		List<Id> tempList;
 
 		while ((line = br.readLine()) != null) {
@@ -69,11 +70,11 @@ public class LDA {
 	//Creates input matrix of as epidemic simulation files as Object and words as features 
 	// This input matrix is passed to SVD matlab function for Eigen decomposition.
 	public int[][] getInputMatrix(String fileName) throws Exception {
-		Map<Window,List<Id>> wordFileMap = getEpidemicWordMap(fileName);
+		LinkedHashMap<Window,List<Id>> wordFileMap = getEpidemicWordMap(fileName);
 		int[][] inputMatrix = new int[fileNameSet.size()][wordFileMap.size()];
 		int columnIndex = 0;
 		int rowIndex;
-		
+
 		//Updating the file access list used for filling up the 2d input array. 
 		updateFileNameAccessList();
 		
@@ -81,7 +82,6 @@ public class LDA {
 			Window window = entry.getKey();
 			List<Id> idList = entry.getValue();
 			windowAccessList.add(window);
-			
 			for(Id id : idList) {
 				//Updating the count matrix column wise using the every word and index of fileName in fileNameAccessList.
 				rowIndex = fileNameAccessList.indexOf(id.getFileName());
@@ -115,12 +115,12 @@ public class LDA {
 		bufWriter.close();
 	}
 	
-	public void LDADecomposition(int r) throws MatlabInvocationException, MatlabConnectionException{
+	public void LDADecomposition(int r, boolean isQuery) throws MatlabInvocationException, MatlabConnectionException{
 		//Create a proxy, which we will use to control MATLAB
 		 MatlabProxyFactory factory = new MatlabProxyFactory();
 		 MatlabProxy proxy = factory.getProxy();
 		 proxy.eval("addpath('./topictoolbox')");
-		 proxy.eval("[WP, DP] = LDADecomposition(" + r + ")");
+		 proxy.eval("[WP, DP] = LDADecomposition(" + r + "," + isQuery + ")");
 		 proxy.disconnect();
 	}
 	
@@ -183,12 +183,12 @@ public class LDA {
 		
 	}
 	
-	public void computeLDA() {
+	public void computeLDA(String inFile) {
 		
 		try {
-			this.createInputMatrixToFile("epidemic_word_file.csv");
+			this.createInputMatrixToFile(inFile);
 			System.out.println("Matrix file created !!");
-			this.LDADecomposition(5);
+			this.LDADecomposition(5,false);
 			System.out.println("SVD matrices created!!");
 			this.createLatentSemanticScoreFile("Data/LDAOutFile.csv","Data/LDASemanticScore.csv",fileNameAccessList, -1);
 			System.out.println("Score file created !!!");
@@ -199,6 +199,6 @@ public class LDA {
 	
 	public static void main(String[] args) {
 		LDA l = new LDA();
-		l.computeLDA();
+		l.computeLDA("query dictionary/epidemic_word_file.csv");
 	}
 }

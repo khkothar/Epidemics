@@ -7,13 +7,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import edu.asu.mwdb.epidemics.domain.Score;
 import edu.asu.mwdb.epidemics.domain.SimilarityDomain;
 import edu.asu.mwdb.epidemics.domain.Window;
 import edu.asu.mwdb.epidemics.domain.Word;
+import edu.asu.mwdb.epidemics.epidemic.analysis.LDA;
 import edu.asu.mwdb.epidemics.epidemic.analysis.SVD;
 import edu.asu.mwdb.epidemics.epidemic.analysis.Task3C;
 import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
@@ -34,8 +37,7 @@ public class Task3d {
 		wordCountQuery = new LinkedHashMap<>();
 		wordCountAll = new LinkedHashMap<>();
 		//Create Map for QueryFile
-		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"query dictionary/epidemic_word_file.csv")));
+		BufferedReader br = new BufferedReader(new FileReader(new File("query dictionary/epidemic_word_file.csv")));
 		String line = "";
 		while ((line = br.readLine()) != null) {
 			Word word = new Word(line);
@@ -92,6 +94,20 @@ public class Task3d {
 		bufWriter.close();
 	}
 
+	// Write matrix function for LDA query;	
+	private void writeMatrixLDAQuery() throws IOException{
+		BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/LDAInputMatrix.csv",true));
+		StringBuffer line = new StringBuffer();
+
+		for(Entry<Window, Integer> entry : wordCountAll.entrySet()){
+			Window window = entry.getKey();
+			line.append(wordCountAll.get(window) + ",");
+		}
+		bufWriter.write(line.deleteCharAt(line.length() - 1).toString());
+		line.setLength(0);
+		bufWriter.close();
+	}
+
 	//List the number of files in the folder.
 	private void updateListFilesInFolder(File folder) {
 		List<String> fileNames = new ArrayList<String>();
@@ -126,6 +142,24 @@ public class Task3d {
 			System.out.println("Score file created !!!");
 			break;
 		case "3b":
+
+			LDA l = new LDA();
+			updateListFilesInFolder(new File(directory));
+			l.createInputMatrixToFile("epidemic_word_file.csv");
+			System.out.println("LDA Data Matrix file created !!");
+			createWordCountMatrix();
+			writeMatrixLDAQuery();
+			System.out.println("Appending query Matrix with Data matrix file created !!");
+			l.LDADecomposition(5,true);
+			System.out.println("LDA with query matrices created!!");
+			
+			getKSimilarFiles("Data/LDAQuerySimilarity.csv",topK);
+			//This is for query matrix.
+//			createWordCountMatrix();
+//			writeMatrixLDAQuery();
+//			System.out.println("LDA with query Matrix file created !!");
+//			l.LDADecomposition(5,true);
+//			System.out.println("LDA with query matrices created!!");
 			break;
 		case "3c":
 			Task3C task3c = new Task3C();
@@ -150,12 +184,36 @@ public class Task3d {
 		}
 
 	}
+	/**
+	 * @param topK
+	 * @throws IOException 
+	 * @throws NumberFormatException 
+	 */
+	private void getKSimilarFiles(String inFile, int topK) throws NumberFormatException, IOException {
+		System.out.println(fileNameList.toString());
+		BufferedReader bufReader = new BufferedReader(new FileReader(new File(inFile)));
+		List<Score> resultList = new ArrayList<>();
+		String line = "";
+		int rowIndex = 0;
+		while ((line = bufReader.readLine()) != null) {
+			Score s = new Score(fileNameList.get(rowIndex),Double.parseDouble(line));
+			resultList.add(s);
+			rowIndex++;
+		}
+		bufReader.close();		
+		Collections.sort(resultList);
+		System.out.println(topK + " similar files to Query file:");
+		for(int i=0;i<topK;i++){
+			System.out.println(resultList.get(i));
+		}
+	}
+
 	public static void main(String[] args) {
 		Task3d task3D = new Task3d();		
 		String directory = "InputCSVs";
 		int rSemantics = Integer.parseInt("5");
-		int topK = Integer.parseInt("15");
-		String choice = "3c";
+		int topK = Integer.parseInt("5");
+		String choice = "3b";
 		int similarityMeasure = Integer.parseInt("1");
 		
 		/*String[] arg = {"InputCSVs","5","3","10"};

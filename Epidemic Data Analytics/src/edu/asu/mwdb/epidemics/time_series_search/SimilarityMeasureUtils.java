@@ -1,5 +1,7 @@
 package edu.asu.mwdb.epidemics.time_series_search;
 
+import java.text.DecimalFormat;
+
 import edu.asu.mwdb.epidemics.similarity.AverageWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DifferenceWordSimilarity;
@@ -62,6 +64,19 @@ public class SimilarityMeasureUtils {
 			return new WeightedDiffWordSimilarity();
 		default:
 			return null;
+		}
+	}
+	
+	public static void printMatrix(float[][] matrix){
+		/*
+		 * temporary result print
+		 */
+		DecimalFormat df = new DecimalFormat("#.#########");
+		for(int i = 0; i < matrix.length; i++){
+			System.out.println();
+			for(int j = 0; j < matrix[0].length; j++){
+				System.out.print(" "+df.format(matrix[i][j]));
+			}
 		}
 	}
 }

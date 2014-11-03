@@ -6,12 +6,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.asu.mwdb.epidemics.fastmap.FastMap;
+import edu.asu.mwdb.epidemics.time_series_search.DrawHeatMap;
 import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class Task4a {
 	public static void main(String args[]) throws Exception{
 		boolean wrongArg = false;
-		if(args.length != 3)
+		if(args.length != 4)
 			wrongArg = true;
 
 		if(wrongArg){
@@ -22,17 +23,17 @@ public class Task4a {
 		String simFilesPath = args[0];
 		int simMeasureType = Integer.parseInt(args[1]);
 		int k = Integer.parseInt(args[2]);
+		File queryFile = new File(args[3]);
 		List<String> files = Arrays.asList(new File(simFilesPath).list());
 		FastMap fastMap = new FastMap(files, SimilarityMeasureUtils.getSimilarity(SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType)), k);
 		
-		/*
-		 * temporary result print
-		 */
-		for(int i = 0; i < files.size(); i++){
-			System.out.println();
-			for(int j = 0; j < k; j++){
-				System.out.println(fastMap.getReducedMatrix().getMatrix()[i][j]);
-			}
+		List<String> similarSimulationFiles = fastMap.getTopKSimilarFiles(queryFile.getName(), k);
+		DrawHeatMap.drawHeatMap(new File(queryFile.getName()));
+		for(String file : similarSimulationFiles){
+			String path = simFilesPath + "\\" + file;
+			DrawHeatMap.drawHeatMap(new File(path));
 		}
+		
+		System.out.println("HeatMaps plotted");
 	}
 }

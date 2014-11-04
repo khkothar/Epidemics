@@ -11,6 +11,7 @@ public class ReducedMatrix {
 	}
 	
 	public void addColumn(int current, Pivot pivot) {
+		if(pivot.getDistance() == 0) return;
 		for(int i = 0; i < matrix.length; i++) {
 			matrix[i][current] = distanceMatrix.getProjectedDistance(pivot, i);
 		}

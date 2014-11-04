@@ -105,7 +105,9 @@ public class WeightedWordSimilarity implements Similarity {
 		float[][] A = computeAMatrix(binaryVector1, binaryVector2,
 				wordOccuranceMapForFile1, wordOccuranceMapForFile2,
 				uniqueWindows);
-		
+		if(uniqueWindows.size() == 0 ) {
+			return 0;
+		}
 		return matrixMultiplications(binaryVector1, binaryVector2, A)/uniqueWindows.size();
 	}
 

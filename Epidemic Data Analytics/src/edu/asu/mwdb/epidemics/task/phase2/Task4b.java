@@ -30,15 +30,20 @@ public class Task4b {
 		for(int i = 0; i < files.size(); i++){
 			filesWithPath.add(simFilesPath + "\\" + files.get(i));
 		}
+		long startTime = System.currentTimeMillis();
+		System.out.println("Executing Task 4b...");
+		System.out.println("Projecting... r = " + r);
 		FastMap fastMap = new FastMap(filesWithPath, SimilarityMeasureUtils.getSimilarity(SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType)), r);
-		
+		System.out.println("Getting k-similar simulations...");
 		List<String> similarSimulationFiles = fastMap.getTopKSimilarFiles(queryFile.getName(), k);
+		System.out.println("Plotting heatMaps...");
 		DrawHeatMap.drawHeatMap(new File(queryFile.getName()));
 		for(String file : similarSimulationFiles){
-			//String path = simFilesPath + "\\" + file;
 			DrawHeatMap.drawHeatMap(new File(file));
 		}
-		
 		System.out.println("HeatMaps plotted");
+		long endTime = System.currentTimeMillis();
+		System.out.println("Fastmap quering : Time taken by Similarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType) + " is : "+ (endTime - startTime)+ " ms");
+		
 	}
 }

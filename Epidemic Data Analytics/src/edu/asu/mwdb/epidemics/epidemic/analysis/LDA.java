@@ -183,12 +183,12 @@ public class LDA {
 		
 	}
 	
-	public void computeLDA(String inFile) {
+	public void computeLDA(String inFile,int r , boolean isQuery) {
 		
 		try {
 			this.createInputMatrixToFile(inFile);
 			System.out.println("Matrix file created !!");
-			this.LDADecomposition(5,false);
+			this.LDADecomposition(r,isQuery);
 			System.out.println("SVD matrices created!!");
 			this.createLatentSemanticScoreFile("Data/LDAOutFile.csv","Data/LDASemanticScore.csv",fileNameAccessList, -1);
 			System.out.println("Score file created !!!");
@@ -197,8 +197,8 @@ public class LDA {
 		}
 	}
 	
-	public static void main(String[] args) {
-		LDA l = new LDA();
-		l.computeLDA("query dictionary/epidemic_word_file.csv");
-	}
+//	public static void main(String[] args) {
+//		LDA l = new LDA();
+//		l.computeLDA("epidemic_word_file.csv", );
+//	}
 }

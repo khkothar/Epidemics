@@ -14,6 +14,10 @@ public class Task3 {
 			if(!(args.length==3||args.length ==4||args.length==7))
 				wrongArg = true;
 			if(wrongArg){
+				if(args.length == 0){
+					System.err.println("Please enter correct command line arguments:");
+					System.exit(0);
+				}
 				System.err.println("Please enter correct command line arguments:");
 				switch(args[0]) {
 				case "3a":					

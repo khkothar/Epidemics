@@ -2,7 +2,8 @@ package edu.asu.mwdb.epidemics.task.phase2;
 
 import edu.asu.mwdb.epidemics.epidemic.analysis.LDA;
 import edu.asu.mwdb.epidemics.epidemic.analysis.SVD;
-import edu.asu.mwdb.epidemics.epidemic.analysis.Task3C;
+import edu.asu.mwdb.epidemics.epidemic.analysis.SimSimSimilarityAnalysis;
+import edu.asu.mwdb.epidemics.epidemic.analysis.LDASVDWithQuery;
 
 public class Task3 {
 
@@ -79,13 +80,13 @@ public class Task3 {
 				lda.computeLDA("simulation dictionary/epidemic_word_file.csv",Integer.parseInt(args[2]), false);
 				break;
 			case "3c" :
-				Task3C task3c = new Task3C();
+				SimSimSimilarityAnalysis task3c = new SimSimSimilarityAnalysis();
 				task3c.executeLODUTask3C(args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]), -1, false, "Data/U.csv");
 				break;
 			case "3d" :
 			case "3e" :
 			case "3f" : 
-				Task3d task3d = new Task3d();
+				LDASVDWithQuery task3d = new LDASVDWithQuery();
 				task3d.execute3D(args[1], Integer.parseInt(args[3]), Integer.parseInt(args[4]), args[5], args[2], 
 						Integer.parseInt(args[6]));
 				break;

@@ -21,7 +21,7 @@ import edu.asu.mwdb.epidemics.similarity.WordSimilarity;
  * @author Mohan-Thorat
  *
  */
-public class Task3C {
+public class SimSimSimilarityAnalysis {
 
 	private static List<String> fileNameList;
 	
@@ -76,8 +76,9 @@ public class Task3C {
 		}
 		
 		for(int i =0 ;i < numOfFile ; i++) {
-			for(int j = 0; j < numOfFile ; j++) {
+			for(int j = i; j < numOfFile ; j++) {
 				simSimMatrix[i][j] = similarity.getScore(fileNameList.get(i), fileNameList.get(j));
+				simSimMatrix[j][i] = simSimMatrix[i][j];
 			}
 		}		
 		
@@ -113,21 +114,21 @@ public class Task3C {
 		System.out.println("Score file created !!!");
 	}
 
-	public static void main(String[] args) {
-		Task3C instance = new Task3C();
-		//InputCSV directory.
-		String input1 = "inputCSVs";
-		//r value.
-		int input2 = Integer.parseInt("4");
-		//Similarity Measure
-		int input3 = Integer.parseInt("2");
-		String defaultFile = "Data/U.csv";
-		try {
-			instance.executeLODUTask3C(input1,input2,input3, -1, false, defaultFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
+//	public static void main(String[] args) {
+//		Task3C instance = new Task3C();
+//		//InputCSV directory.
+//		String input1 = "inputCSVs";
+//		//r value.
+//		int input2 = Integer.parseInt("4");
+//		//Similarity Measure
+//		int input3 = Integer.parseInt("2");
+//		String defaultFile = "Data/U.csv";
+//		try {
+//			instance.executeLODUTask3C(input1,input2,input3, -1, false, defaultFile);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 
 }

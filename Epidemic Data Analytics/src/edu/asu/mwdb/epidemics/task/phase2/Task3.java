@@ -4,6 +4,7 @@ import edu.asu.mwdb.epidemics.epidemic.analysis.LDA;
 import edu.asu.mwdb.epidemics.epidemic.analysis.SVD;
 import edu.asu.mwdb.epidemics.epidemic.analysis.SimSimSimilarityAnalysis;
 import edu.asu.mwdb.epidemics.epidemic.analysis.LDASVDWithQuery;
+import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class Task3 {
 
@@ -39,7 +40,11 @@ public class Task3 {
 				System.exit(0);
 			}
 			Task3 task3 = new Task3();
+			long startTime = System.currentTimeMillis();
+			System.out.println("Executing Task 3...");
 			task3.driverProgramforTask3(args);
+			long endTime = System.currentTimeMillis();
+			System.out.println("Task3 : Time taken is : "+ (endTime - startTime)+ " ms");
 		}
 		catch(Exception e){
 			e.printStackTrace();

@@ -41,7 +41,7 @@ public class AverageWordSimilarity implements Similarity {
 		}
 		br.close();
 		
-		while(!flag) {
+		if(!flag) {
 			br = new BufferedReader(new FileReader(new File(
 					"query dictionary/epidemic_word_file_avg.csv")));
 			while ((line = br.readLine()) != null) {

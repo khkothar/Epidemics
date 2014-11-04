@@ -25,6 +25,7 @@ public class HeatMap {
 	public HeatMap(String csvFileName) throws IOException {
 		//HeatChart map = new HeatChart();
 		String line = null;
+		//String fileName = csvFileName.substring(csvFileName.lastIndexOf("\\")+1, csvFileName.length());
 		BufferedReader br = new BufferedReader(new FileReader(new File(csvFileName)));
 		line = br.readLine();
 		String states[] = line.split(",");

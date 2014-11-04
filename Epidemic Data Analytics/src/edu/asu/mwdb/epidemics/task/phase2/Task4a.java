@@ -26,6 +26,8 @@ public class Task4a {
 		List<String> files = Arrays.asList(new File(simFilesPath).list());
 		List<String> filesWithPath = new ArrayList<String>();
 		long startTime = System.currentTimeMillis();
+		System.out.println("Executing Task 4a...");
+		System.out.println("Projecting...");
 		for(int i = 0; i < files.size(); i++){
 			filesWithPath.add(simFilesPath + "\\" + files.get(i));
 		}

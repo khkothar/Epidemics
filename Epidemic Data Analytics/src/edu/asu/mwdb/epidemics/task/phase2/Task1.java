@@ -12,6 +12,7 @@ import edu.asu.mwdb.epidemics.similarity.WeightedAverageWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.WeightedDiffWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.WeightedWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.WordSimilarity;
+import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class Task1 {
 	public static void main(String args[]){
@@ -27,8 +28,12 @@ public class Task1 {
 			String file1 = args[0];
 			String file2 = args[1];
 			int similarityMeasure = Integer.parseInt(args[2]);
+			long startTime = System.currentTimeMillis();
+			System.out.println("Executing Task 1...");
 			Task1 task1 = new Task1();
 			task1.driverProgramforTask1(file1, file2, similarityMeasure);
+			long endTime = System.currentTimeMillis();
+			System.out.println("Task1 : Time taken by SImilarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(similarityMeasure) + " is : "+ (endTime - startTime));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		

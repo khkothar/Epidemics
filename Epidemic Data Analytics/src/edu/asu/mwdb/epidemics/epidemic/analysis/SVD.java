@@ -29,7 +29,7 @@ public class SVD {
 
 	private static Set<String> fileNameSet = new HashSet<>();
 	private static List<Window> windowAccessList = new ArrayList<>();
-	private static List<String> fileNameAccessList = new ArrayList<>();
+	public static List<String> fileNameAccessList = new ArrayList<>();
 	
 	//Function for generating the Map from given epidemic word file.
 	private Map<Window, List<Id>> getEpidemicWordMap(String fileName) throws Exception {
@@ -188,7 +188,7 @@ public class SVD {
 		try {
 			s.createInputMatrixToFile("epidemic_word_file.csv");
 			System.out.println("Matrix file created !!");
-			s.svDecomposition(5,false);
+			s.svDecomposition(4,false);
 			System.out.println("SVD matrices created!!");
 			s.createLatentSemanticScoreFile("Data/U.csv","Data/SVDSemanticScore.csv",fileNameAccessList, -1);
 			System.out.println("Score file created !!!");

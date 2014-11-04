@@ -165,7 +165,7 @@ public class Task3d {
 			Task3C task3c = new Task3C();
 			TimeSeriesSearch timeSeriesSearch = new TimeSeriesSearch();
 			updateListFilesInFolder(new File(directory));
-			timeSeriesSearch.getKSimilarSimulations("query dictionary/14.csv", directory, fileNameList.size(), SimilarityMeasureUtils.getSimilarityMeasure(similarityMeasure));
+			timeSeriesSearch.getKSimilarSimulations("query dictionary/query.csv", directory, fileNameList.size(), SimilarityMeasureUtils.getSimilarityMeasure(similarityMeasure));
 			//Write List to File
 			BufferedWriter bufWriter = new BufferedWriter(new FileWriter("Data/QUERY.csv"));
 			StringBuffer line = new StringBuffer();
@@ -211,9 +211,9 @@ public class Task3d {
 	public static void main(String[] args) {
 		Task3d task3D = new Task3d();		
 		String directory = "InputCSVs";
-		int rSemantics = Integer.parseInt("5");
+		int rSemantics = Integer.parseInt("4");
 		int topK = Integer.parseInt("5");
-		String choice = "3b";
+		String choice = "3c";
 		int similarityMeasure = Integer.parseInt("1");
 		
 		/*String[] arg = {"InputCSVs","5","3","10"};

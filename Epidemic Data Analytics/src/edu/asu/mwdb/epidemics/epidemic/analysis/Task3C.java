@@ -115,9 +115,12 @@ public class Task3C {
 
 	public static void main(String[] args) {
 		Task3C instance = new Task3C();
+		//InputCSV directory.
 		String input1 = "inputCSVs";
-		int input2 = Integer.parseInt("5");
-		int input3 = Integer.parseInt("1");
+		//r value.
+		int input2 = Integer.parseInt("4");
+		//Similarity Measure
+		int input3 = Integer.parseInt("2");
 		String defaultFile = "Data/U.csv";
 		try {
 			instance.executeLODUTask3C(input1,input2,input3, -1, false, defaultFile);

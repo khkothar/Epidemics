@@ -37,6 +37,6 @@ public class Task2 {
 		}
 		System.out.println("Heatmaps Plotted");
 		long endTime = System.currentTimeMillis();
-		System.out.println("Task 2 : Time taken by Similarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(similarityType) + " is : "+ (endTime - startTime));
+		System.out.println("Task 2 : Time taken by Similarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(similarityType) + " is : "+ (endTime - startTime)+ " ms");
 	}
 }

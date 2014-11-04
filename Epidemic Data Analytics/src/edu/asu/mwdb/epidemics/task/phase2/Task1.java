@@ -33,7 +33,7 @@ public class Task1 {
 			Task1 task1 = new Task1();
 			task1.driverProgramforTask1(file1, file2, similarityMeasure);
 			long endTime = System.currentTimeMillis();
-			System.out.println("Task1 : Time taken by SImilarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(similarityMeasure) + " is : "+ (endTime - startTime));
+			System.out.println("Task1 : Time taken by SImilarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(similarityMeasure) + " is : "+ (endTime - startTime) + " ms");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		

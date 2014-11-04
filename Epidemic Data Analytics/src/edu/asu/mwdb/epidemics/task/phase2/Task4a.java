@@ -32,7 +32,7 @@ public class Task4a {
 		FastMap fastMap = new FastMap(filesWithPath, SimilarityMeasureUtils.getSimilarity(SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType)), r);
 		System.out.println("\nMapping Error between reduced space and original space : "+ fastMap.getError());
 		long endTime = System.currentTimeMillis();
-		System.out.println("Fastmap Mapping error : Time taken by Similarity type: "+ simMeasureType + " is : "+ (endTime - startTime));
+		System.out.println("Fastmap Mapping error : Time taken by Similarity type: "+ simMeasureType + " is : "+ (endTime - startTime)+ " ms");
 		
 	}
 }

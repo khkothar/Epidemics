@@ -43,7 +43,7 @@ public class Task4b {
 		}
 		System.out.println("HeatMaps plotted");
 		long endTime = System.currentTimeMillis();
-		System.out.println("Fastmap quering : Time taken by Similarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType) + " is : "+ (endTime - startTime));
+		System.out.println("Fastmap quering : Time taken by Similarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType) + " is : "+ (endTime - startTime)+ " ms");
 		
 	}
 }

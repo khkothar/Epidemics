@@ -17,7 +17,7 @@ public class Task4b {
 
 		if(wrongArg){
 			System.err.println("Please enter correct command line arguments:");
-			System.err.println("Usage: Task4b <Simulation files path)><similarity measure(enter 1 to 8 for tasks a-h)> <k> <Query file> <r>");
+			System.err.println("Usage: Task4b <Simulation files path)><similarity measure(enter 1 to 8 for tasks a-h)> <r> <Query file> <k>");
 			System.exit(0);
 		}
 		String simFilesPath = args[0];

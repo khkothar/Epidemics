@@ -34,8 +34,6 @@ public class LocationMatrix {
 		if(shortestDistanceFile.exists()) {
 			shortestDistance = new ArrayList<int[]>();
 			setShortestDistanceMatrix(shortestDistanceFile);
-		} else {
-			throw new IOException("StateDistace.csv does not exist in the workspace");
 		}
 	}
 

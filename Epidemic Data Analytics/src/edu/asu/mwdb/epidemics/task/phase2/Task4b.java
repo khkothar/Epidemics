@@ -32,7 +32,7 @@ public class Task4b {
 		}
 		long startTime = System.currentTimeMillis();
 		System.out.println("Executing Task 4b...");
-		System.out.println("Projecting...");
+		System.out.println("Projecting... r = " + r);
 		FastMap fastMap = new FastMap(filesWithPath, SimilarityMeasureUtils.getSimilarity(SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType)), r);
 		System.out.println("Getting k-similar simulations...");
 		List<String> similarSimulationFiles = fastMap.getTopKSimilarFiles(queryFile.getName(), k);

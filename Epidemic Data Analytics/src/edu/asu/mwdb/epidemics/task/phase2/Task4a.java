@@ -27,14 +27,13 @@ public class Task4a {
 		List<String> filesWithPath = new ArrayList<String>();
 		long startTime = System.currentTimeMillis();
 		System.out.println("Executing Task 4a...");
-		System.out.println("Projecting...");
+		System.out.println("Projecting... r = " + r);
 		for(int i = 0; i < files.size(); i++){
 			filesWithPath.add(simFilesPath + "\\" + files.get(i));
 		}
 		FastMap fastMap = new FastMap(filesWithPath, SimilarityMeasureUtils.getSimilarity(SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType)), r);
 		System.out.println("\nMapping Error between reduced space and original space : "+ fastMap.getError());
 		long endTime = System.currentTimeMillis();
-		System.out.println("Fastmap Mapping error : Time taken by Similarity type: "+ simMeasureType + " is : "+ (endTime - startTime)+ " ms");
-		
+		System.out.println("Fastmap Mapping error : Time taken by Similarity type: "+ SimilarityMeasureUtils.getSimilarityMeasure(simMeasureType) + " is : "+ (endTime - startTime)+ " ms");
 	}
 }

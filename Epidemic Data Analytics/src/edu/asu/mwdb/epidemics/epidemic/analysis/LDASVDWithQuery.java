@@ -147,7 +147,7 @@ public class LDASVDWithQuery {
 			createWordCountMatrix();
 			writeMatrixLDAQuery();
 			System.out.println("Appending query Matrix with Data matrix file created !!");
-			l.LDADecomposition(5,true);
+			l.LDADecomposition(r,true);
 			System.out.println("LDA with query matrices created!!");
 			
 			getKSimilarFiles("Data/LDAQuerySimilarity.csv",topK);

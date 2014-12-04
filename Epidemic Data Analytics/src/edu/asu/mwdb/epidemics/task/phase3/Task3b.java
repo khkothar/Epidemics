@@ -9,6 +9,14 @@ import edu.asu.mwdb.epidemics.graph_analysis.SimilarityGraphUtilities;
 public class Task3b {
 	
 	public static void main(String[] args) throws IOException {
+		boolean wrongArg = false;
+		if(args.length != 4)
+			wrongArg = true;
+		if(wrongArg){
+			System.err.println("Please enter correct command line arguments:");
+			System.err.println("Usage: Task3b <Similarity Graph file> <k> <Input File path) (alpha)>");
+			System.exit(0);
+		}
 		String simGraph = args[0];
 		float alpha = Float.parseFloat(args[3]);
 		int k = Integer.parseInt(args[1]);

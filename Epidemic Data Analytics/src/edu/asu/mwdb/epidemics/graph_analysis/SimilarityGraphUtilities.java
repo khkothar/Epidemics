@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import javafx.scene.AmbientLight;
-import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
 import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
 import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
@@ -72,11 +70,11 @@ public class SimilarityGraphUtilities {
 		temp = multiplyByFactor(alpha, AMatrix);
 		for(int i = 0 ; i < 5; i++){
 			neighbourWalk = multiplyAllMatrices(temp, neighbourWalk, randomWalk);
+			System.out.println("Iteration : "+i);
+			SimilarityMeasureUtils.printArray(neighbourWalk);
 		}
-		System.out.println("\nDominant Nodes : ");
-		for(int i = 0 ; i < dimension; i++){
-			System.out.println(neighbourWalk[i]);
-		}
+		System.out.println("Final Array!!!");
+		SimilarityMeasureUtils.printArray(neighbourWalk);
 		return null;
 	}
 	private float[] multiplyAllMatrices(float[][] temp,

@@ -3,7 +3,6 @@ package edu.asu.mwdb.epidemics.task.phase3;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -70,7 +69,7 @@ public class Task4a {
 		//Similarity measure and other parameters
 		KNN = Integer.parseInt(args[2]);
 		knownLabeledFiles = "KnownLabeledFile";
-		unknownLabeledFiles = "UnknownLabledFile";
+		unknownLabeledFiles = "UnknownLabeledFile";
 		directoryPath = args[0];
 		File dirPath = new File(directoryPath);
 		emptyDirectories(dirPath);
@@ -125,11 +124,13 @@ public class Task4a {
 		File tempKnownFile = new File (knownLabeledFiles + "\\");
 		File tempunKnownFile = new File (unknownLabeledFiles+ "\\");
 		try{
-			for(File file: tempKnownFile.listFiles()){
-				FileDeleteStrategy.FORCE.delete(file);
-			}
-			for(File file: tempunKnownFile.listFiles()){
-				FileDeleteStrategy.FORCE.delete(file);
+			if(tempKnownFile.listFiles().length > 0 && tempunKnownFile.listFiles().length > 0){
+				for(File file: tempKnownFile.listFiles()){
+					FileDeleteStrategy.FORCE.delete(file);
+				}
+				for(File file: tempunKnownFile.listFiles()){
+					FileDeleteStrategy.FORCE.delete(file);
+				}
 			}
 		}
 		catch(IOException e){

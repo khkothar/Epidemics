@@ -23,6 +23,8 @@ public class Task3b {
 		int k = Integer.parseInt(args[1]);
 		List<String> dominantNodes = new ArrayList<String>();
 		SimilarityGraphUtilities simObj = new SimilarityGraphUtilities(args[2]);
+		System.out.println("Executing task 3b...");
+		System.out.println("Retrieving k most dominant nodes...");
 		dominantNodes = simObj.getKDominantNodes(simGraph, k, alpha, convergenceFactor);
 		System.out.println(k + " Dominant nodes are :");
 		for(int i = 0; i < dominantNodes.size(); i++)

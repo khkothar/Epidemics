@@ -13,10 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import sun.rmi.server.UnicastRef;
 import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
 import edu.asu.mwdb.epidemics.task.phase3.DominantNodesWrapper;
-import edu.asu.mwdb.epidemics.task.phase3.temp;
 import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class SimilarityGraphUtilities {

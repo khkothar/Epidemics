@@ -112,9 +112,4 @@ public class Layer {
 		}
 		return accessedIndex;
 	}
-	
-	public static void main(String[] args) {
-//		if(compareHashCode("111110", "111111", 0)) System.out.println("Matched");
-//		else System.out.println("not matched");
-	}
 }

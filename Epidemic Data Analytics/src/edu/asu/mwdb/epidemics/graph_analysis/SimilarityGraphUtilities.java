@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import sun.rmi.server.UnicastRef;
 import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
 import edu.asu.mwdb.epidemics.task.phase3.DominantNodesWrapper;
 import edu.asu.mwdb.epidemics.task.phase3.temp;
@@ -59,7 +60,7 @@ public class SimilarityGraphUtilities {
 		SimilarityMeasureUtils.printMatrix(simMatrix);
 	}
 
-	public List<String> getKDominantNodes(String simGraph, int k, float alpha) throws IOException {
+	public List<String> getKDominantNodes(String simGraph, int k, float alpha, float convergenceFactor) throws IOException {
 		float[][] AMatrix = new float[dimension][dimension];
 		List<String> dominantNodes = new ArrayList<String>();
 		AMatrix = getAmatrix(simGraph);
@@ -72,9 +73,16 @@ public class SimilarityGraphUtilities {
 		randomWalk = multiplyByFactor(1 - alpha, randomWalk);
 		float temp[][] = new float[dimension][dimension];
 		temp = multiplyByFactor(alpha, AMatrix);
-		for(int i = 0 ; i < 1000; i++){
+		float[] prevUq = new float[dimension];
+		int iteration = 0;
+		while(true){
+			prevUq = neighbourWalk;
 			neighbourWalk = multiplyAllMatrices(temp, neighbourWalk, randomWalk);
+			if(checkForConvergence(prevUq, neighbourWalk, convergenceFactor))
+				break;
+			iteration++;
 		}
+		System.out.println("\n Converged after "+ iteration + " iterations");
 		System.out.println("\nFinal page rank!!!\n");
 		SimilarityMeasureUtils.printArray(neighbourWalk);
 		dominantNodes = retrieveDominantNodes(neighbourWalk, k, null, null);
@@ -302,7 +310,7 @@ public class SimilarityGraphUtilities {
 		}
 		return factor;
 	}
-	public List<String> getKRelevantFiles(String simGraph, int k, float alpha, String qFile1, String qFile2) throws IOException {
+	public List<String> getKRelevantFiles(String simGraph, int k, float alpha, String qFile1, String qFile2, float convergenceFactor) throws IOException {
 		float[][] AMatrix = new float[dimension][dimension];
 		List<String> dominantNodes = new ArrayList<String>();
 		AMatrix = getAmatrix(simGraph);
@@ -318,12 +326,33 @@ public class SimilarityGraphUtilities {
 	
 		float temp[][] = new float[dimension][dimension];
 		temp = multiplyByFactor(alpha, AMatrix);
-		for(int i = 0 ; i < 1000; i++){
+		float[] prevUq = new float[dimension];
+		int iteration = 1;
+		while(true){
+			prevUq = neighbourWalk;
 			neighbourWalk = multiplyAllMatrices(temp, neighbourWalk, randomWalk);
+			if(checkForConvergence(prevUq, neighbourWalk, convergenceFactor))
+				break;
+			iteration++;
 		}
+		System.out.println("\n Converged after "+iteration + " iterations");
 		System.out.println("\nFinal page rank!!!\n");
 		SimilarityMeasureUtils.printArray(neighbourWalk);
 		dominantNodes = retrieveDominantNodes(neighbourWalk, k, qFile1, qFile2);
 		return dominantNodes;
+	}
+	private boolean checkForConvergence(float[] prevUq, float[] neighbourWalk, float convergenceFactor) {
+		float[] res = new float[dimension];
+		for(int i = 0; i < dimension; i++){
+			res[i] = (float)(Math.pow(neighbourWalk[i], 2) - Math.pow(prevUq[i], 2));
+		}
+		float sumAll = 0;
+		for(int i = 0; i < dimension; i++){
+			sumAll = sumAll + res[i];
+		}
+		sumAll = (float)Math.sqrt(sumAll);
+		if(sumAll < convergenceFactor)
+			return true;
+		return false;
 	}
 }

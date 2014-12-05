@@ -12,8 +12,10 @@ public class Task3a {
 			System.err.println("Usage: Task3a <Threshold> <Input File path)>");
 			System.exit(0);
 		}
+		System.out.println("Creating similarity graph...");
 		float threshold = Float.parseFloat(args[0]);
 		SimilarityGraphUtilities simObj = new SimilarityGraphUtilities(args[1]);
 		simObj.createSimilarityGraph(threshold);
+		System.out.println("\nsimGraph.csv graph file created.");
 	}
 }

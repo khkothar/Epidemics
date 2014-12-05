@@ -81,7 +81,6 @@ public class SimilarityMeasureUtils {
 	}
 
 	public static void printArray(float[] neighbourWalk) {
-		System.out.println("\nDominant Nodes : ");
 		for(int i = 0 ; i < neighbourWalk.length; i++){
 			System.out.println(neighbourWalk[i]);
 		}

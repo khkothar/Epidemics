@@ -29,7 +29,9 @@ public class Task3c {
 		int k = Integer.parseInt(args[1]);
 		List<String> dominantNodes = new ArrayList<String>();
 		SimilarityGraphUtilities simObj = new SimilarityGraphUtilities(args[2]);
+		System.out.println("Retrieving k most relevant files...");
 		dominantNodes = simObj.getKRelevantFiles(simGraph, k, alpha, args[4], args[5]);
+		System.out.println();
 		System.out.println(k + " most relevant simulations are:");
 		for(int i = 0; i < dominantNodes.size(); i++)
 			System.out.println(dominantNodes.get(i));

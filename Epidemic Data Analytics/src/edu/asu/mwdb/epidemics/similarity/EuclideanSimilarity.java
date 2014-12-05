@@ -28,11 +28,11 @@ public class EuclideanSimilarity implements Similarity{
 			}
 		}
 		for (int j = 0; j < similarityArray.length; j++) {
-			partialSimilarity += Math.sqrt(similarityArray[j]);
+			partialSimilarity += similarityArray[j];
 		}
 		bufReader1.close();
 		bufReader2.close();
-		
+		partialSimilarity = (float) Math.sqrt(partialSimilarity);
 		return 1/(1+partialSimilarity/51);
 	}
 	
@@ -40,7 +40,7 @@ public class EuclideanSimilarity implements Similarity{
 		double in1 = Double.parseDouble(value1);
 		double in2 = Double.parseDouble(value2);
 		
-		return Math.abs(in1*in1 - in2*in2);
+		return Math.abs((in1 - in2)*(in1 - in2));
 	}
 
 }

@@ -18,9 +18,11 @@ import edu.asu.mwdb.epidemics.domain.Word;
 public class GlobalBitVector {
 	
 	private Set<Window> uniqueWindows = null;
+	//Map containing filename as key and binary array of unique window size as value.
 	private Map<String, int[]> bitVectorMapForInputFiles = null;
+	//Map containing filename as key and count array of unique window size as value.
 	private Map<String, int[]> countVectorMapForInputFiles = null;
-	
+
 	public Map<String, int[]> getCountVectorMapForInputFiles() {
 		return countVectorMapForInputFiles;
 	}
@@ -137,5 +139,4 @@ public class GlobalBitVector {
 			e.printStackTrace();
 		}
 	}
-	
 }

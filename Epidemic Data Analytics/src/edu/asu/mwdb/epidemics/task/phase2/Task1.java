@@ -39,7 +39,7 @@ public class Task1 {
 		}		
 	}
 	
-	private void driverProgramforTask1(String file1, String file2, int simMeasure) throws Exception{
+	public float driverProgramforTask1(String file1, String file2, int simMeasure) throws Exception{
 		Similarity similarity = null;		
 		String similarityMeasure = "";
 		switch(simMeasure) {
@@ -78,8 +78,9 @@ public class Task1 {
 		}
 		float similarityScore  = similarity.getScore(file1,file2);
 		DecimalFormat df = new DecimalFormat("#.#########");
-		System.out.println(similarityMeasure + " Similarity between " +
-		getFileName(file1) + " and " +getFileName(file2) +" : "+ df.format(similarityScore));
+		//System.out.println(similarityMeasure + " Similarity between " +
+		//getFileName(file1) + " and " +getFileName(file2) +" : "+ df.format(similarityScore));
+		return similarityScore;
 	}
 	
 	//Get Files names from Absolute paths.

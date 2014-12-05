@@ -21,7 +21,7 @@ public class LSH {
 		
 		//Creating  global bit vector.
 		gVector = new GlobalBitVector(wordFileName);
-		createLayers(noOfLayers, hashesPerLayer, wordFileName);
+		createLayers(noOfLayers, hashesPerLayer);
 	}
 	
 	public List<Layer> getLayerList() {
@@ -32,7 +32,7 @@ public class LSH {
 		this.layerList = layerList;
 	}
 
-	private final void createLayers(int noOfLayers, int hashesPerLayer, String wordFileName){
+	private final void createLayers(int noOfLayers, int hashesPerLayer){
 		//Create global bit vector map.
 		Map<String, int[]> fileBitVectorMap = gVector.getBitVectorMapForInputFiles();
 		Set<Window> uniqueWindowSet = gVector.getUniqueWindows();
@@ -56,7 +56,7 @@ public class LSH {
 		List<Integer> randomNumberList = new ArrayList<>();
 		
 		while (generated.size() < hashesPerLayer) {
-			Integer next = rng.nextInt(range) + 1;
+			Integer next = rng.nextInt(range - 1) + 1;
 			generated.add(next);
 		}
 		
@@ -66,7 +66,8 @@ public class LSH {
 		return randomNumberList;
 	}
 	
-	public void getTSimilarFiles(String queryFileName, int t) {
+	//Get similar files.
+	public Set<String> getTSimilarFiles(String queryFileName, int t) {
 		
 		Set<String> similarFileResultSet = new HashSet<>();
 		int i, accessedIndex = 0;
@@ -89,12 +90,16 @@ public class LSH {
 			}
 		}
 		System.out.println("Accessed indices" + accessedIndex);
+		
+		return similarFileResultSet;
 	}
 	
 	public static void main(String[] args) {
-		
+		LSH lshObj = new LSH(10, 10, "epidemic_word_file.csv");
+		Set<String> list = lshObj.getTSimilarFiles("queryFile_10.csv", 5);
+		System.out.println("Similar file list");
+		for(String str : list) {
+			System.out.print(str + " ");
+		}
 	}
-	
-	
-	
 }

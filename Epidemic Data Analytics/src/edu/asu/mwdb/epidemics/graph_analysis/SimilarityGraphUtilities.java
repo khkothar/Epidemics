@@ -6,23 +6,32 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
+import edu.asu.mwdb.epidemics.task.phase3.DominantNodesWrapper;
 import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class SimilarityGraphUtilities {
 	int dimension;
 	File[] listOfFiles;
 	int divFactor;
+	Map<Integer, String> fileToIndexMap = new HashMap<Integer, String>();
 	
 	public SimilarityGraphUtilities(String inputFilePath){
 		File folder = new File(inputFilePath);
 		this.listOfFiles = folder.listFiles();
 		this.dimension = folder.listFiles().length;
+		for(int i = 0 ; i < listOfFiles.length; i++){
+			fileToIndexMap.put(i, listOfFiles[i].getName());
+		}
 	}
 	public void createSimilarityGraph(float threshold) throws Exception{
-		//DecimalFormat df = new DecimalFormat("#.#########");
 		float simMatrix[][] = new float[dimension][dimension];
 		File simMatrixCSV = new File("simGraph.csv");
 		BufferedWriter buffWriter = new BufferedWriter(new FileWriter(simMatrixCSV));
@@ -41,27 +50,21 @@ public class SimilarityGraphUtilities {
 					simMatrix[i][j] = 1;
 				buffWriter.write(Float.toString(simMatrix[i][j]));
 				if(j < dimension-1)
-					buffWriter.write(",");				
+					buffWriter.write(",");
 			}
 			buffWriter.write("\n");
 		}
-		
 		buffWriter.close();
-/*		for(int i = 0; i < listOfFiles.length; i++){
-			System.out.println(listOfFiles[i].getName());
-			System.out.println();
-		}
-*/		SimilarityMeasureUtils.printMatrix(simMatrix);
+		SimilarityMeasureUtils.printMatrix(simMatrix);
 	}
 
 	public List<String> getKDominantNodes(String simGraph, int k, float alpha) throws IOException {
 		float[][] AMatrix = new float[dimension][dimension];
-
+		List<String> dominantNodes = new ArrayList<String>();
 		AMatrix = getAmatrix(simGraph);
 		float neighbourWalk[] = new float[dimension];
 		float randomWalk[] = new float[dimension];
 		for(int i = 0 ; i < dimension; i++){
-			//System.out.println(1/dimension);
 			randomWalk[i] = (float)1/dimension;
 			neighbourWalk[i] = (float)1/dimension;
 		}
@@ -70,12 +73,47 @@ public class SimilarityGraphUtilities {
 		temp = multiplyByFactor(alpha, AMatrix);
 		for(int i = 0 ; i < 5; i++){
 			neighbourWalk = multiplyAllMatrices(temp, neighbourWalk, randomWalk);
-			System.out.println("Iteration : "+i);
-			SimilarityMeasureUtils.printArray(neighbourWalk);
 		}
-		System.out.println("Final Array!!!");
+		System.out.println("\nFinal page rank!!!\n");
 		SimilarityMeasureUtils.printArray(neighbourWalk);
-		return null;
+		dominantNodes = retrieveDominantNodes(neighbourWalk, k, null, null);
+		return dominantNodes;
+	}
+
+	private List<String> retrieveDominantNodes(float[] neighbourWalk, int k, String qFile1, String qFile2) {
+		RankComparator comparator = new RankComparator();
+		PriorityQueue<DominantNodesWrapper> priorityQue = new PriorityQueue<DominantNodesWrapper>(k, comparator);
+		List<String> domNodes = new ArrayList<String>();
+		for(int i = 0; i< neighbourWalk.length; i++){
+			DominantNodesWrapper wrapper = new DominantNodesWrapper();
+			wrapper.setIndex(i);
+			wrapper.setRankValue(neighbourWalk[i]);
+				if(qFile1 != null && (fileToIndexMap.get(wrapper.getIndex()).equals(qFile1) || fileToIndexMap.get(wrapper.getIndex()).equals(qFile2)))
+				{}
+				else
+					priorityQue.add(wrapper);
+			if(priorityQue.size() > k)
+				priorityQue.poll();
+		}
+		DominantNodesWrapper dom = priorityQue.poll();
+		while(dom != null){
+			domNodes.add(fileToIndexMap.get(dom.getIndex()));
+			dom = priorityQue.poll();
+		}
+		return domNodes;
+	}
+	
+	private class RankComparator implements Comparator<DominantNodesWrapper> {
+	    /**
+	     * compare overrides the compare function of Comparator class
+	     */
+	    public int compare(DominantNodesWrapper node1, DominantNodesWrapper node2) {
+	        if (node1.getRankValue() <= node2.getRankValue()) {
+	            return -1;
+	        } else {
+	            return 1;
+	        }
+	    }
 	}
 	private float[] multiplyAllMatrices(float[][] temp,
 			float[] neighbourWalk, float[] randomWalk) {
@@ -143,5 +181,29 @@ public class SimilarityGraphUtilities {
 				factor++;
 		}
 		return factor;
+	}
+	public List<String> getKRelevantFiles(String simGraph, int k, float alpha, String qFile1, String qFile2) throws IOException {
+		float[][] AMatrix = new float[dimension][dimension];
+		List<String> dominantNodes = new ArrayList<String>();
+		AMatrix = getAmatrix(simGraph);
+		float neighbourWalk[] = new float[dimension];
+		float randomWalk[] = new float[dimension];
+		for(int i = 0 ; i < dimension; i++){
+			if(fileToIndexMap.get(i).equals(qFile1) || fileToIndexMap.get(i).equals(qFile2)){
+				randomWalk[i] = (float)1/dimension;
+				neighbourWalk[i] = (float)1/dimension;
+			}
+		}
+		randomWalk = multiplyByFactor(1 - alpha, randomWalk);
+	
+		float temp[][] = new float[dimension][dimension];
+		temp = multiplyByFactor(alpha, AMatrix);
+		for(int i = 0 ; i < 1000; i++){
+			neighbourWalk = multiplyAllMatrices(temp, neighbourWalk, randomWalk);
+		}
+		System.out.println("\nFinal page rank!!!\n");
+		SimilarityMeasureUtils.printArray(neighbourWalk);
+		dominantNodes = retrieveDominantNodes(neighbourWalk, k, qFile1, qFile2);
+		return dominantNodes;
 	}
 }

@@ -30,6 +30,7 @@ public class Task3c {
 		int k = Integer.parseInt(args[1]);
 		List<String> dominantNodes = new ArrayList<String>();
 		SimilarityGraphUtilities simObj = new SimilarityGraphUtilities(args[2]);
+		System.out.println("Executing task 3c...");
 		System.out.println("Retrieving k most relevant files...");
 		dominantNodes = simObj.getKRelevantFiles(simGraph, k, alpha, args[4], args[5], convergenceFactor);
 		System.out.println();

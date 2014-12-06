@@ -87,7 +87,7 @@ public class Layer {
 		return true;
 	}
 
-	public int getSimilarFilesNames(int[] queryBitVector, int t, Set<String> similarFileResultSet,int threshold, int accessedIndex) {
+	public int getSimilarFilesNames(int[] queryBitVector, int t, Set<String> similarFileResultSet,int threshold, int accessedIndex, List<String> results) {
 		List<Integer> indexPosition = this.getIndexPosition();
 		Map<String,List<String>> similarFileBucketMap = this.getSimilarFileBucketMap();
 		
@@ -101,6 +101,7 @@ public class Layer {
 			if(similarFileBucketMap.containsKey(queryHashCode.toString())) {
 				for(String str : similarFileBucketMap.get(queryHashCode.toString())) {
 					if(similarFileResultSet.size() < t) {
+						results.add(str);
 						similarFileResultSet.add(str);
 					} else {
 						accessedIndex++;
@@ -115,6 +116,7 @@ public class Layer {
 					accessedIndex++;
 					for(String str : entry.getValue()) {
 						if(similarFileResultSet.size() < t) {
+							results.add(str);
 							similarFileResultSet.add(str);
 						} else {
 							break;

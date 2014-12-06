@@ -19,6 +19,7 @@ import edu.asu.mwdb.epidemics.dt.Label;
 import edu.asu.mwdb.epidemics.lsh.GlobalBitVector;
 import edu.asu.mwdb.epidemics.lsh.QueryGlobalBitVector;
 import edu.asu.mwdb.epidemics.read.EpidemicSimulationFileReaderThread;
+import edu.asu.mwdb.epidemics.task.Task1Query;
 import edu.asu.mwdb.epidemics.utility.FileMoverUtility;
 import edu.asu.mwdb.epidemics.write.buffer.BufferPool;
 import edu.asu.mwdb.epidemics.write.csv.Dictionary;
@@ -39,7 +40,7 @@ public class Task4b {
 		try {
 			if(args.length == 5){
 				preProcessing(args);
-				computeObjectFeatureMatrix();
+				computeObjectFeatureMatrix(args);
 
 				Map<String, Label> training = new LinkedHashMap<String, Label>();
 				for(Map.Entry<String, String> entry: labelMap.entrySet()){
@@ -79,7 +80,7 @@ public class Task4b {
 		knownLabeledFiles = "KnownLabeledFile";
 		unknownLabeledFiles = "UnknownLabeledFile";
 		epidemicKnownLabelWordFile = "EpidemicInputWordFile";
-		epidemicUnknownLabelWordFile = "EpidemicQueryWordFile";
+		epidemicUnknownLabelWordFile = "QueryWordFileDirectory";
 
 		File dirPath = new File(args[0]);
 		String labelsFile = args[1];
@@ -87,7 +88,7 @@ public class Task4b {
 		fileMover.moveFiles(labelsFile, labelMap, labelSet);
 		//Calling the Phase1 - Task1 Internally for Phase3 for KnownLabelebFiles and unKnownLabeledFiles Separately
 		runPhase1Task1Internally(args, true);
-		runPhase1Task1Internally(args, false);
+		//runPhase1Task1Internally(args, false);
 	}
 
 	private static void runPhase1Task1Internally(String args[], boolean knownLabel) throws IOException,
@@ -138,7 +139,7 @@ public class Task4b {
 	}
 
 	@SuppressWarnings("unused")
-	public static void computeObjectFeatureMatrix() throws Exception{
+	public static void computeObjectFeatureMatrix(String[] args) throws Exception{
 		//Call the GlobalBitVector for the KnownLabeldFiles and UnknownLabeledFiles
 		knownCountVectorMap = new LinkedHashMap<String, int[]>();
 		unknownCountVectorMap = new LinkedHashMap<String, int[]>();
@@ -204,11 +205,19 @@ public class Task4b {
 		}
 
 		//Get the files present in UnknownLabeledFiles and obtain the map.
-		QueryGlobalBitVector globalUnknownLabels = new QueryGlobalBitVector(globalbitKnownLabels.getUniqueWindows(),epidemicUnknownLabelWordFile + "\\epidemic_word_file.csv");
-		File unknownFileDirectory = new File(unknownLabeledFiles+"\\");
-		for(File file: unknownFileDirectory.listFiles()){
+		Task1Query task1query = new Task1Query();
+		String[] params = new String[4];
+		params[0] = args[2];
+		params[1] = args[3];
+		params[2] = args[4];
+		params[3] = unknownLabeledFiles;		
+		Task1Query.createQueryWordFile(params);
+		
+		File queryWordDir = new File(epidemicUnknownLabelWordFile);
+		for(File file : queryWordDir.listFiles()){
+			QueryGlobalBitVector globalUnknownLabels = new QueryGlobalBitVector(globalbitKnownLabels.getUniqueWindows(),file.getAbsolutePath());
 			unknownCountVectorMap.put(file.getName(), globalUnknownLabels.getCountVectorForQueryFile());
-		}
+		}	
 
 		System.out.println("\n\n\n Unkown Before :");
 		for(Map.Entry<String, int[]> entry: unknownCountVectorMap.entrySet()){

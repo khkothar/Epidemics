@@ -120,7 +120,7 @@ public class Normalize {
 		String entryOut[] = new String[entry.length];
 		entryOut[0] = entry[0];
 		entryOut[1] = entry[1];
-		DecimalFormat df = new DecimalFormat("#.#########");
+		DecimalFormat df = new DecimalFormat("#.########");
 		for(int i = 2 ; i< entry.length ; i++){
 			Double normalizedVal;
 			double valueToNormalize = Double.parseDouble(entry[i]);

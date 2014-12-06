@@ -165,7 +165,7 @@ public class CreateEpidemicWordDic {
 		for(int i = 0; i< Constants.NUM_STATES; i++){
 			String stateName = Constants.stateMap.get(i+2);
 			String timeStamp = windowEntries.get(0)[1];
-			timeStamp += "'" + windowEntries.get(0)[0];
+			//timeStamp += "'" + windowEntries.get(0)[0];
 			Index idx = new Index(fileName, stateName, timeStamp);
 			String idxString = idx.toString(idx);
 			singleEntry = idxString;

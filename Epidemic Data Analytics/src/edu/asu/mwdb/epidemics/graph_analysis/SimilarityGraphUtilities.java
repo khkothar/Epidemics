@@ -316,8 +316,8 @@ public class SimilarityGraphUtilities {
 		float randomWalk[] = new float[dimension];
 		for(int i = 0 ; i < dimension; i++){
 			if(getFileToIndexMap().get(i).equals(qFile1) || getFileToIndexMap().get(i).equals(qFile2)){
-				randomWalk[i] = (float)1/dimension;
-				neighbourWalk[i] = (float)1/dimension;
+				randomWalk[i] = (float)0.5;
+				neighbourWalk[i] = (float)0.5;
 			}
 		}
 		randomWalk = multiplyByFactor(1 - alpha, randomWalk);

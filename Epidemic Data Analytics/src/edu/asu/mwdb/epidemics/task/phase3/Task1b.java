@@ -40,7 +40,7 @@ public static void main(String[] args) {
 				}
 				System.out.println("Number of Unique Vectors considered: " + list.size());
 				System.out.println("Number of Overall Vectors considered: " + results.size());
-				System.out.println("Number of Overall Vectors considered: " + results.size()*2);
+				System.out.println("Number of bytes accessed: " + results.size()*2);
 			} else {
 				System.out.println("Printing top " + t + " results.");
 				for(String str : list) {
@@ -48,7 +48,7 @@ public static void main(String[] args) {
 				}
 				System.out.println("Number of Unique Vectors considered: " + list.size());
 				System.out.println("Number of Overall Vectors considered: " + results.size());
-				System.out.println("Number of Overall Vectors considered: " + results.size()*2);
+				System.out.println("Number of bytes accessed: " + results.size()*2);
 			}
 		}
 	}

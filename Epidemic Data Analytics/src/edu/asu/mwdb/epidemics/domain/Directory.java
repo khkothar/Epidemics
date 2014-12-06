@@ -14,8 +14,15 @@ public class Directory {
 			if (!dir.exists()) {
 				throw new IOException("Invalid directory path");
 			} else {
-				this.path = dir.getAbsolutePath();
-				init(dir);
+				if(dir.isFile()) {
+					index = 0;
+					files = new String[1];
+					files[0] = dirPath.split("\\\\")[1];
+					path = dirPath.split("\\\\")[0];
+				} else {
+					this.path = dir.getAbsolutePath();
+					init(dir);
+				}
 			}
 		} else {
 			throw new NullPointerException("Directory path is NULL");

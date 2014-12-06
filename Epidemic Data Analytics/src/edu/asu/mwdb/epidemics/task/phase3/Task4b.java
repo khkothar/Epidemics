@@ -7,11 +7,15 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import matlabcontrol.MatlabConnectionException;
 import matlabcontrol.MatlabInvocationException;
 import edu.asu.mwdb.epidemics.domain.Directory;
 import edu.asu.mwdb.epidemics.domain.Resolution;
 import edu.asu.mwdb.epidemics.domain.Window;
+import edu.asu.mwdb.epidemics.dt.DecisionTree;
+import edu.asu.mwdb.epidemics.dt.Label;
 import edu.asu.mwdb.epidemics.lsh.GlobalBitVector;
 import edu.asu.mwdb.epidemics.lsh.QueryGlobalBitVector;
 import edu.asu.mwdb.epidemics.read.EpidemicSimulationFileReaderThread;
@@ -33,8 +37,35 @@ public class Task4b {
 
 	public static void main(String[] args) {		
 		try {
-			preProcessing(args);
-			computeObjectFeatureMatrix();
+			if(args.length == 5){
+				preProcessing(args);
+				computeObjectFeatureMatrix();
+
+				Map<String, Label> training = new LinkedHashMap<String, Label>();
+				for(Map.Entry<String, String> entry: labelMap.entrySet()){
+					String filename = entry.getKey();
+					training.put(filename, new Label(entry.getValue().charAt(0)));
+				}
+				DecisionTree dt = new DecisionTree(knownCountVectorMap, training);
+				Map<String, Label> result = new LinkedHashMap<String, Label>();
+				result = dt.identifyLabel(unknownCountVectorMap);
+
+				File resultFile = new File("Result.csv");
+				FileUtils.writeStringToFile(resultFile, "Files,Label \n", true);
+				for(Map.Entry<String, Label> entry: result.entrySet()){
+					String line = entry.getKey() + "," + entry.getValue().getName() + "\n";
+					FileUtils.writeStringToFile(resultFile, line, true);
+				}
+			}
+			else {
+				System.err.println("Please enter correct command line arguments:");
+				System.err.println("Usage: Task4b <Directory Path of Files>"
+						+ "<Directory path of lables i.e. labels.csv> "
+						+ "<Window Length>"
+						+ "<Shift Length>"
+						+ "<Resolution>");
+				System.exit(0);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,7 +168,7 @@ public class Task4b {
 			}
 			System.out.println("");
 		}
-		
+
 		//Setting the average values of the file.
 		System.out.println("\n\n Avg Word Values");
 		for(Map.Entry<Integer, Float> entry: avgWordMap.entrySet()){
@@ -188,7 +219,7 @@ public class Task4b {
 			}
 			System.out.println("");
 		}
-		
+
 		for(Map.Entry<String, int[]> entry: unknownCountVectorMap.entrySet()){
 			int arr[] = entry.getValue();
 			for(int i=0;i<arr.length;i++){

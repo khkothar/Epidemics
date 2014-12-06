@@ -19,7 +19,7 @@ public class Task2b {
 			wrongArg = true;
 		if(wrongArg){
 			System.err.println("Please enter correct command line arguments:");
-			System.err.println("Usage: Task2b <t> <Query Word File> <Simulation Word File> <bits per dimension>");
+			System.err.println("Usage: Task2b <t top results> <Query Word File> <Simulation Word File> <bits per dimension>");
 			System.exit(0);
 		}
 		

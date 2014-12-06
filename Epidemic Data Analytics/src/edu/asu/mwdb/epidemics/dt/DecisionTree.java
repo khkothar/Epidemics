@@ -23,7 +23,7 @@ public class DecisionTree {
 
 	private TreeNode createDecisionTreeHelper(Map<String, int[]> remainingData, String usedFeatures) {
 		
-		if(remainingData.size() > data.size() * 0.1) {
+		if(remainingData.size() > 1 && !belongToSameLabel(remainingData)) {
 			
 			int featureIndex = getFeatureWithHighestInformationGain(remainingData, usedFeatures);
 			TreeNode treeNode = new TreeNode();
@@ -38,6 +38,19 @@ public class DecisionTree {
 			return null;
 		}
 		
+	}
+
+	private boolean belongToSameLabel(Map<String, int[]> remainingData) {
+
+		Label label = (Label) remainingData.keySet().toArray()[0];
+		
+		for(Map.Entry<String, int[]> entry : remainingData.entrySet()) {
+			if(trainingSet.get(entry.getKey()) != label) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	private Map<String, int[]> getEntries(Map<String, int[]> remainingData, int featureIndex, int value) {

@@ -1,6 +1,7 @@
 package edu.asu.mwdb.epidemics.time_series_search;
 
 import java.text.DecimalFormat;
+import java.util.Map;
 
 import edu.asu.mwdb.epidemics.similarity.AverageWordSimilarity;
 import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
@@ -80,9 +81,9 @@ public class SimilarityMeasureUtils {
 		}
 	}
 
-	public static void printArray(float[] neighbourWalk) {
+	public static void printArray(float[] neighbourWalk, Map<Integer, String> fileToIndexMap) {
 		for(int i = 0 ; i < neighbourWalk.length; i++){
-			System.out.println(neighbourWalk[i]);
+			System.out.println(fileToIndexMap.get(i) + ":"+neighbourWalk[i]);
 		}
 	}
 }

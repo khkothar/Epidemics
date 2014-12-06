@@ -13,24 +13,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import sun.rmi.server.UnicastRef;
 import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
 import edu.asu.mwdb.epidemics.task.phase3.DominantNodesWrapper;
-import edu.asu.mwdb.epidemics.task.phase3.temp;
 import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class SimilarityGraphUtilities {
 	int dimension;
 	File[] listOfFiles;
 	int divFactor;
-	Map<Integer, String> fileToIndexMap = new HashMap<Integer, String>();
+	private Map<Integer, String> fileToIndexMap = new HashMap<Integer, String>();
 	
 	public SimilarityGraphUtilities(String inputFilePath){
 		File folder = new File(inputFilePath);
 		this.listOfFiles = folder.listFiles();
 		this.dimension = folder.listFiles().length;
 		for(int i = 0 ; i < listOfFiles.length; i++){
-			fileToIndexMap.put(i, listOfFiles[i].getName());
+			getFileToIndexMap().put(i, listOfFiles[i].getName());
 		}
 	}
 	public void createSimilarityGraph(float threshold) throws Exception{
@@ -84,7 +82,7 @@ public class SimilarityGraphUtilities {
 		}
 		System.out.println("\n Converged after "+ iteration + " iterations");
 		System.out.println("\nFinal page rank!!!\n");
-		SimilarityMeasureUtils.printArray(neighbourWalk);
+		SimilarityMeasureUtils.printArray(neighbourWalk, getFileToIndexMap());
 		dominantNodes = retrieveDominantNodes(neighbourWalk, k, null, null);
 		return dominantNodes;
 	}
@@ -97,7 +95,7 @@ public class SimilarityGraphUtilities {
 			DominantNodesWrapper wrapper = new DominantNodesWrapper();
 			wrapper.setIndex(i);
 			wrapper.setRankValue(neighbourWalk[i]);
-				if(qFile1 != null && (fileToIndexMap.get(wrapper.getIndex()).equals(qFile1) || fileToIndexMap.get(wrapper.getIndex()).equals(qFile2)))
+				if(qFile1 != null && (getFileToIndexMap().get(wrapper.getIndex()).equals(qFile1) || getFileToIndexMap().get(wrapper.getIndex()).equals(qFile2)))
 				{}
 				else
 					priorityQue.add(wrapper);
@@ -106,7 +104,7 @@ public class SimilarityGraphUtilities {
 		}
 		DominantNodesWrapper dom = priorityQue.poll();
 		while(dom != null){
-			domNodes.add(fileToIndexMap.get(dom.getIndex()));
+			domNodes.add(getFileToIndexMap().get(dom.getIndex()));
 			dom = priorityQue.poll();
 		}
 		return domNodes;
@@ -317,7 +315,7 @@ public class SimilarityGraphUtilities {
 		float neighbourWalk[] = new float[dimension];
 		float randomWalk[] = new float[dimension];
 		for(int i = 0 ; i < dimension; i++){
-			if(fileToIndexMap.get(i).equals(qFile1) || fileToIndexMap.get(i).equals(qFile2)){
+			if(getFileToIndexMap().get(i).equals(qFile1) || getFileToIndexMap().get(i).equals(qFile2)){
 				randomWalk[i] = (float)1/dimension;
 				neighbourWalk[i] = (float)1/dimension;
 			}
@@ -337,7 +335,7 @@ public class SimilarityGraphUtilities {
 		}
 		System.out.println("\n Converged after "+iteration + " iterations");
 		System.out.println("\nFinal page rank!!!\n");
-		SimilarityMeasureUtils.printArray(neighbourWalk);
+		SimilarityMeasureUtils.printArray(neighbourWalk, getFileToIndexMap());
 		dominantNodes = retrieveDominantNodes(neighbourWalk, k, qFile1, qFile2);
 		return dominantNodes;
 	}
@@ -354,5 +352,17 @@ public class SimilarityGraphUtilities {
 		if(sumAll < convergenceFactor)
 			return true;
 		return false;
+	}
+	/**
+	 * @return the fileToIndexMap
+	 */
+	public Map<Integer, String> getFileToIndexMap() {
+		return fileToIndexMap;
+	}
+	/**
+	 * @param fileToIndexMap the fileToIndexMap to set
+	 */
+	public void setFileToIndexMap(Map<Integer, String> fileToIndexMap) {
+		this.fileToIndexMap = fileToIndexMap;
 	}
 }

@@ -162,6 +162,11 @@ public class DecisionTree {
 
 		Label majorCandidate = trainingSet.get(files.get(0));
 				int counter = 0;
+		
+		if(files.size() == 0) {
+			return (Label) trainingSet.values().toArray()[0];
+		}
+		
 	    for (int i = 1; i < files.size(); ++i) {
 			if (majorCandidate.getName() == trainingSet.get(files.get(i)).getName()) {
 	            ++counter;

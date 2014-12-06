@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,12 +194,13 @@ public class CreateEpidemicWordDic {
 		Double actualValue;
 		Double ceterValue = 0.0;
 		actualValue = Double.parseDouble(string);
+		DecimalFormat df = new DecimalFormat("#.########");
 		for(Quantization band : bands){
 			if(actualValue >= band.getBandStart() && actualValue <= band.getBandEnd()){
 				ceterValue =  band.getRepresentative();
 			}
 		}
-		return ceterValue.toString();
+		return df.format(ceterValue);
 	}
 
 	public static List<String> getAllDataFilesInDir(String dir){

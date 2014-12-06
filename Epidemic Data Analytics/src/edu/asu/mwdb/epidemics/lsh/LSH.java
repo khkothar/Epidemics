@@ -103,14 +103,19 @@ public class LSH {
 		}
 		
 		return indexStructureSize;
-	}
-	
-	public static void main(String[] args) {
-		LSH lshObj = new LSH(10, 10, "epidemic_word_file.csv");
-		System.out.println("Index structure size(in bytes): " + lshObj.getIndexStructureSize());
-		int t = 5;
+	}	public static void main(String[] args) {
 		
-		Set<String> list = lshObj.getTSimilarFiles("queryFile_10.csv", t);
+		int noOfLayers = Integer.parseInt(args[0]);
+		int noOfHashes = Integer.parseInt(args[1]);
+		String inputEpidemicWordFileName = args[2];
+		String queryEpidemicWordFileName = args[3];
+		int t = Integer.parseInt(args[4]);
+		
+		LSH lshObj = new LSH(noOfLayers, noOfHashes, inputEpidemicWordFileName);
+		System.out.println("Index structure size(in bytes): " + lshObj.getIndexStructureSize());
+		
+		
+		Set<String> list = lshObj.getTSimilarFiles(queryEpidemicWordFileName, t);
 		if(list == null || list.size() == 0) {
 			System.out.println("Unable to find any serach results after completing iterations for threshold!!");
 		} else {

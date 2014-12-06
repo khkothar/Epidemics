@@ -30,7 +30,7 @@ public class Task1 {
 			int shiftLength = Integer.parseInt(args[2]);
 			int levels = Integer.parseInt(args[3]);
 
-			int numberOfCores = Runtime.getRuntime().availableProcessors();
+			int numberOfCores = 2;
 			Resolution resolution = new Resolution(levels);
 			BufferPool bufferPool = new BufferPool();
 			Directory dir = new Directory(directory);

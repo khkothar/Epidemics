@@ -34,7 +34,9 @@ public class Task2b {
 		VAFile vaFile = new VAFile(b, globalBitVector.getCountVectorMapForInputFiles());
 		List<String> results = vaFile.getSimilarFiles(countVector, t);
 		
-		System.out.println(results);
+		System.out.println("Results : " + results);
+		System.out.println("Bytes Read from Index :" + vaFile.getIndexSize());
+		System.out.println("the number of compressed vectors needed to expand to answer the query : " + vaFile.getNumberOfCompressedVectorsRequired());
 		
 	}
 

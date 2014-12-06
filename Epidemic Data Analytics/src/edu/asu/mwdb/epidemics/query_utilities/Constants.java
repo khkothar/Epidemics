@@ -64,8 +64,8 @@ public class Constants {
 		"US-RI", "US-SC", "US-SD", "US-TN", "US-TX", "US-UT", "US-VA", "US-VT", "US-WA", "US-WI", "US-WV", "US-WY"};
 	public static final String SEPARATOR_COMMA = ",";
 	public static final String SEPARATOR_SEMICOLON = ";";
-	public static final String SEPARATOR_OPENING_TRING_BRACKT = "<";
-	public static final String SEPARATOR_CLOSING_TRING_BRACKT = ">";
+	public static final String SEPARATOR_OPENING_TRING_BRACKT = "";
+	public static final String SEPARATOR_CLOSING_TRING_BRACKT = "";
 	public static final String SEPARATOR_NEWLINE = "\n";
 	public static final String NORM_DIRECTORY = "normalized_files";
 	public static final String EPIDEMIC_WORD_DIC_PATH = "EpidemicQueryWordFile";

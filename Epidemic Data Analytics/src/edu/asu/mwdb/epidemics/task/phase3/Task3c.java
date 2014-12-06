@@ -21,7 +21,7 @@ public class Task3c {
 			wrongArg = true;
 		if(wrongArg){
 			System.err.println("Please enter correct command line arguments:");
-			System.err.println("Usage: Task3c <Similarity Graph file> <k> <Input File path> <alpha> <query file 1> <query file 2)> <convergence factor>");
+			System.err.println("Usage: Task3c <Similarity Graph file> <k> <Input File path> <alpha> <query file 1> <query file 2> <convergence factor>");
 			System.exit(0);
 		}
 		String simGraph = args[0];

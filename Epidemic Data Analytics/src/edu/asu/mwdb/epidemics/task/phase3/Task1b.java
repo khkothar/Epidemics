@@ -1,5 +1,7 @@
 package edu.asu.mwdb.epidemics.task.phase3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import edu.asu.mwdb.epidemics.lsh.LSH;
@@ -24,18 +26,29 @@ public static void main(String[] args) {
 		LSH lshObj = new LSH(noOfLayers, noOfHashes, inputEpidemicWordFileName);
 		System.out.println("Index structure size(in bytes): " + lshObj.getIndexStructureSize());
 		
+		List<String> results = new ArrayList<>();
 		
-		Set<String> list = lshObj.getTSimilarFiles(queryEpidemicWordFileName, t);
+		Set<String> list = lshObj.getTSimilarFiles(queryEpidemicWordFileName, t, results);
 		if(list == null || list.size() == 0) {
 			System.out.println("Unable to find any serach results after completing iterations for threshold!!");
+			System.out.println("Number of Unique Vectors considered: 0");
 		} else {
 			if (list.size() < t) {
-				System.out.println("Unable to find " + t + " number of results. Printing the found results.");
+				System.out.println("Unable to find " + t + " number of results. Printing the " + list.size() + " results.");
+				for(String str : list) {
+					System.out.print(str + " ");
+				}
+				System.out.println("Number of Unique Vectors considered: " + list.size());
+				System.out.println("Number of Overall Vectors considered: " + results.size());
+				System.out.println("Number of bytes accessed: " + results.size()*2);
 			} else {
 				System.out.println("Printing top " + t + " results.");
-			}
-			for(String str : list) {
-				System.out.print(str + " ");
+				for(String str : list) {
+					System.out.print(str + " ");
+				}
+				System.out.println("Number of Unique Vectors considered: " + list.size());
+				System.out.println("Number of Overall Vectors considered: " + results.size());
+				System.out.println("Number of bytes accessed: " + results.size()*2);
 			}
 		}
 	}

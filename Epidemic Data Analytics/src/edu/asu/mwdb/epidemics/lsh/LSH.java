@@ -67,7 +67,7 @@ public class LSH {
 	}
 	
 	//Get similar files.
-	public Set<String> getTSimilarFiles(String queryFileName, int t) {
+	public Set<String> getTSimilarFiles(String queryFileName, int t, List<String> results) {
 		
 		Set<String> similarFileResultSet = new HashSet<>();
 		int i, accessedIndex = 0;
@@ -80,7 +80,7 @@ public class LSH {
 		
 		for(i=0 ; i<threshold ; i++) {
 			for(Layer layer : layerList) {
-				accessedIndex += layer.getSimilarFilesNames(queryBitVector, t, similarFileResultSet, i, accessedIndex);
+				accessedIndex += layer.getSimilarFilesNames(queryBitVector, t, similarFileResultSet, i, accessedIndex,results);
 				if(similarFileResultSet.size() >= t) {
 					break;
 				}
@@ -103,30 +103,13 @@ public class LSH {
 		}
 		
 		return indexStructureSize;
-	}	public static void main(String[] args) {
-		
-		int noOfLayers = Integer.parseInt(args[0]);
-		int noOfHashes = Integer.parseInt(args[1]);
-		String inputEpidemicWordFileName = args[2];
-		String queryEpidemicWordFileName = args[3];
-		int t = Integer.parseInt(args[4]);
-		
-		LSH lshObj = new LSH(noOfLayers, noOfHashes, inputEpidemicWordFileName);
-		System.out.println("Index structure size(in bytes): " + lshObj.getIndexStructureSize());
-		
-		
-		Set<String> list = lshObj.getTSimilarFiles(queryEpidemicWordFileName, t);
-		if(list == null || list.size() == 0) {
-			System.out.println("Unable to find any serach results after completing iterations for threshold!!");
-		} else {
-			if (list.size() < t) {
-				System.out.println("Unable to find " + t + " number of results. Printing the found results.");
-			} else {
-				System.out.println("Printing top " + t + " results.");
-			}
-			for(String str : list) {
-				System.out.print(str + " ");
-			}
-		}
+	}	
+	
+	public long getOverallVectorConsidered() {
+		return 0;
+	}
+	
+	public long bytesAccessedForResult() {
+		return 0;
 	}
 }

@@ -19,6 +19,7 @@ public class VAFile {
 	private Map<String, int[]> originalVectors;
 	private Map<String, BitSet> vaIndex;
 	private int bitsetSize;
+	private int numberOfCompressedVectorsRequired;
 	
 	
 	public VAFile(int b, Map<String, int[]> originalVectors) {		
@@ -124,6 +125,7 @@ public class VAFile {
 	public List<String> getSimilarFiles(int[] query, int k) {
 		
 		List<String> possibleCandidates = getResultsWithFalsePositives(query, k);
+		numberOfCompressedVectorsRequired = possibleCandidates.size();
 		PriorityQueue<FileNameWrapper> priorityQueue = new PriorityQueue<FileNameWrapper>(k, new FileNameComparator());
 		
 		for(String fileName : possibleCandidates) {
@@ -142,6 +144,11 @@ public class VAFile {
 		return finalResults;
 	}
 	
+	public int getNumberOfCompressedVectorsRequired() {
+		return numberOfCompressedVectorsRequired;
+	}
+
+
 	private double getActualDistace(int[] queryVector, String fileName) {
 		int[] originalVector = originalVectors.get(fileName);
 		int squareSum = 0;

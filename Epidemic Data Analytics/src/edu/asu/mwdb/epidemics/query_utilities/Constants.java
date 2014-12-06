@@ -68,7 +68,7 @@ public class Constants {
 	public static final String SEPARATOR_CLOSING_TRING_BRACKT = ">";
 	public static final String SEPARATOR_NEWLINE = "\n";
 	public static final String NORM_DIRECTORY = "normalized_files";
-	public static final String EPIDEMIC_WORD_DIC_PATH = "query_word_file";
+	public static final String EPIDEMIC_WORD_DIC_PATH = "EpidemicQueryWordFile";
 	public static final int NUM_STATES = 51; 
 	public static final String EPIDIEMIC_DICTIONARY_AVG = "epidemic_word_file_avg";
 	//US-AK,US-AL,US-AR,US-AZ,US-CA,US-CO,US-CT,US-DC,US-DE,US-FL,US-GA,US-HI,US-IA,US-ID,US-IL,US-IN,US-KS,US-KY,US-LA,US-MA,US-MD,US-ME,US-MI,US-MN,US-MO

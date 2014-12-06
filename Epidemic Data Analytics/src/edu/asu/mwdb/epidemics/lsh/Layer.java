@@ -1,6 +1,7 @@
 package edu.asu.mwdb.epidemics.lsh;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +32,18 @@ public class Layer {
 	public void setSimilarFileBucketMap(
 			Map<String, List<String>> similarFileBucketMap) {
 		this.similarFileBucketMap = similarFileBucketMap;
+	}
+	
+	//Function to get size of layer considering the integer of 2 bytes and char of 1 byte.
+	public long getSize(){
+		long layerSize = 0;
+		layerSize += this.indexPositionList.size() * 2;
+		layerSize += this.getSimilarFileBucketMap().keySet().size() * this.getIndexPosition().size();
+		Collection<List<String>> valueList = this.getSimilarFileBucketMap().values();
+		for(List<String> l: valueList) {
+			layerSize += l.size() * 10;
+		}
+		return layerSize;
 	}
 	
 	private void createHashFamilies(List<Integer> positionList, Map<String, int[]> globalBitVectorMap) {

@@ -2,7 +2,10 @@ package edu.asu.mwdb.epidemics.fastmap;
 
 import java.util.List;
 
+import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
+import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
 import edu.asu.mwdb.epidemics.similarity.Similarity;
+import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class DistanceMatrix {
 
@@ -23,9 +26,18 @@ public class DistanceMatrix {
 					distanceMatrixInOriginalSpace[i][j] = 0;
 				} else {
 					float score = similarityMeasure.getScore(files.get(i), files.get(j));
-					float distance = 1.0f/(1 + score);
+					float distance = 0;
+					if(similarityMeasure instanceof EuclideanSimilarity || similarityMeasure instanceof DTWSimilarity) {
+						if(score == 0) distance = Float.MAX_VALUE;
+						else distance = 1.0f/score;
+					} else {
+						distance = 1.0f/(1 + score);
+					}
 					distanceMatrixInOriginalSpace[i][j] = distance;
 					distanceMatrixInOriginalSpace[j][i] = distance;
+					
+					distanceMatrixInReducedSpace[i][j] = distance;
+					distanceMatrixInReducedSpace[j][i] = distance;
 				}
 			}
 		}
@@ -35,19 +47,16 @@ public class DistanceMatrix {
 	public void update(float[][] reducedMatrix, Pivot pivot) {
 		for (int i = 0; i < reducedMatrix.length; i++) {
 			for (int j = 0; j < reducedMatrix.length; j++) {
-				if (current == 0) {
-					distanceMatrixInReducedSpace[i][j] = (float) Math
-							.sqrt(Math.abs((Math.pow(distanceMatrixInOriginalSpace[i][j], 2) - Math
-									.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
-											2))));
-				} else {
-					distanceMatrixInReducedSpace[i][j] = (float) Math
-							.sqrt(Math.abs((Math.pow(distanceMatrixInReducedSpace[i][j], 2) - Math
-									.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
-											2))));
-				}
+				
+				distanceMatrixInReducedSpace[i][j] = (float) Math
+						.sqrt(Math.abs((Math.pow(distanceMatrixInReducedSpace[i][j], 2) - Math
+								.pow((reducedMatrix[i][current] - reducedMatrix[j][current]),
+										2))));
 			}
 		}
+		
+		SimilarityMeasureUtils.printMatrix(distanceMatrixInReducedSpace);
+		System.out.println("\n\n\n");
 		
 		current++;
 	}

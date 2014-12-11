@@ -5,7 +5,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import edu.asu.mwdb.epidemics.similarity.DTWSimilarity;
+import edu.asu.mwdb.epidemics.similarity.EuclideanSimilarity;
 import edu.asu.mwdb.epidemics.similarity.Similarity;
+import edu.asu.mwdb.epidemics.time_series_search.SimilarityMeasureUtils;
 
 public class FastMap {
 	
@@ -14,6 +17,7 @@ public class FastMap {
 	private ReducedMatrix reducedMatrix;
 	private Similarity similarityMeasure;
 	private List<String> files;
+	float[][] distanceInReducedSpace;
 	
 	public FastMap(List<String> files, Similarity similarityMeasure, int k) throws Exception {
 		this.files = files;
@@ -27,6 +31,22 @@ public class FastMap {
 			reducedMatrix.addColumn(i, pivot);
 			distanceMatrix.update(reducedMatrix.getMatrix(), pivot);
 		}
+		
+		int noOfObjects = reducedMatrix.getMatrix().length;
+		
+		distanceInReducedSpace = new float[noOfObjects][noOfObjects];
+		
+		for(int i = 0; i < noOfObjects; i++) {
+			for (int j = 0; j < noOfObjects; j++) {
+				distanceInReducedSpace[i][j] = 0;
+				for(int l = 0; l < pivotList.size(); l++) {
+					distanceInReducedSpace[i][j] +=  Math.pow(reducedMatrix.getMatrix()[i][l] - reducedMatrix.getMatrix()[j][l], 2);  
+				}
+				distanceInReducedSpace[i][j] = (float) Math.sqrt(distanceInReducedSpace[i][j]);
+			}
+		}
+		
+		
 		/*System.out.println("\ncurrent Matrix");
 		SimilarityMeasureUtils.printMatrix(distanceMatrix.getCurrentMatrix());
 		System.out.println("\noriginal matrix Matrix");
@@ -43,11 +63,10 @@ public class FastMap {
 		float sumOfDistanceInOriginalSpace = 0;
 		
 		float[][] distanceMatrixInOrigialSpace = distanceMatrix.getDistanceMatrixInOriginalSpace();
-		float[][] distanceMatrixInReducedSpace = distanceMatrix.getDistanceMatrixInReducedSpace();
 		
 		for(int i = 0; i < distanceMatrixInOrigialSpace.length; i++) {
 			for(int j = 0; j < distanceMatrixInOrigialSpace.length; j++) {
-				distanceDifference += (float) Math.pow(distanceMatrixInOrigialSpace[i][j] - distanceMatrixInReducedSpace[i][j], 2);
+				distanceDifference += (float) Math.pow(distanceMatrixInOrigialSpace[i][j] - distanceInReducedSpace[i][j], 2);
 				sumOfDistanceInOriginalSpace += (float) Math.pow(distanceMatrixInOrigialSpace[i][j], 2);
 			}
 		}
@@ -57,37 +76,72 @@ public class FastMap {
 	
 	public List<String> getTopKSimilarFiles(String query, int k) throws Exception {
 			
-		float modifiedDistance = 0;
+		float queryCoordinates[] = new float[pivotList.size()];
 		
 		PriorityQueue<Wrapper> heap = new PriorityQueue<Wrapper>(k, new MinHeap());
 
 		for(int i = 0; i < pivotList.size(); i++) {
+			
 			Pivot pivot = pivotList.get(i);
 			float qa, qb, ab;
-			if(i == 0) {
-				qa = (1.0f/1.0f + similarityMeasure.getScore(files.get(pivot.getA()), query));
-				qb = (1.0f/1.0f + similarityMeasure.getScore(files.get(pivot.getB()), query));
-				ab = pivot.getDistance();
+				
+			float score = similarityMeasure.getScore(files.get(pivot.getA()), query);
+			
+			if(similarityMeasure instanceof EuclideanSimilarity || similarityMeasure instanceof DTWSimilarity) {
+				if(score == 0) qa = Float.MAX_VALUE;
+				else qa = 1.0f/score;
 			} else {
-				qa = reducedMatrix.getMatrix()[pivot.getA()][i - 1] - modifiedDistance;
-				qb = reducedMatrix.getMatrix()[pivot.getB()][i - 1] - modifiedDistance;
-				ab = pivot.getDistance();
+				qa = 1.0f/(1 + score);
 			}
 			
-			modifiedDistance = (qa*qa + ab*ab - qb*qb)/2*ab;
+			score = similarityMeasure.getScore(files.get(pivot.getB()), query);
+			
+			if(similarityMeasure instanceof EuclideanSimilarity || similarityMeasure instanceof DTWSimilarity) {
+				if(score == 0) qb = Float.MAX_VALUE;
+				else qb = 1.0f/score;
+			} else {
+				qb = 1.0f/(1 + score);
+			}
+			
+			score = similarityMeasure.getScore(files.get(pivot.getB()), files.get(pivot.getA()));
+			
+			if(similarityMeasure instanceof EuclideanSimilarity || similarityMeasure instanceof DTWSimilarity) {
+				if(score == 0) ab = Float.MAX_VALUE;
+				else ab = 1.0f/score;
+			} else {
+				ab = 1.0f/(1 + score);
+			}
+			
+			queryCoordinates[i] = (qa*qa + ab*ab - qb*qb)/2*ab;
 		}
 		
+		System.out.println("\n\nReduced Matrix\n\n");
+		SimilarityMeasureUtils.printMatrix(reducedMatrix.getMatrix());
+		
+		System.out.println();
+		
 		for(int i = 0; i < pivotList.size(); i++) {
-			if(heap.size() == k) {
+			System.out.print(queryCoordinates[i] + " ");
+		}
+		for(int i = 0; i < reducedMatrix.getMatrix().length; i++) {
+			float distance = 0;
+			for(int j = 0; j < pivotList.size(); j++) {
+				distance += (float) Math.pow(queryCoordinates[j] - reducedMatrix.getMatrix()[i][j], 2);
+			}
+			
+			System.out.println(Math.sqrt(distance));
+			
+			heap.offer(new Wrapper((float)Math.sqrt(distance), i));
+			
+			if(heap.size() > k) {
 				heap.poll();
 			}
-			heap.offer(new Wrapper(Math.abs(reducedMatrix.getMatrix()[i][pivotList.size() - 1] - modifiedDistance), i));
 		}
 		
 		List<String> results = new ArrayList<String>();
 		
 		for(int i = 0; i < k; i++) {
-			System.out.println("sim file " + i + " : " + files.get(heap.peek().index));
+			System.out.println("sim file " + i + " : " + files.get(heap.peek().index) + " : " + heap.peek().distance);
 			results.add(files.get(heap.poll().getIndex()));
 		}
 		

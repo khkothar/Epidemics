@@ -27,6 +27,7 @@ public class DecisionTree {
 			
 			int featureIndex = getFeatureWithHighestInformationGain(remainingData, usedFeatures);
 			TreeNode treeNode = new TreeNode();
+			treeNode.files = new ArrayList<String>(remainingData.keySet());
 			treeNode.featureIndex = featureIndex;
 			Map<String, int[]> leftEntries = getEntries(remainingData, featureIndex, 0);
 			treeNode.left = createDecisionTreeHelper(leftEntries, usedFeatures + featureIndex + ",");
@@ -35,21 +36,25 @@ public class DecisionTree {
 			return treeNode;
 			
 		} else {
-			return null;
+			TreeNode treeNode = new TreeNode();
+			treeNode.files =  new ArrayList<String>(remainingData.keySet());
+			treeNode.left = null;
+			treeNode.right = null;
+			return treeNode;
 		}
 		
 	}
 
 	private boolean belongToSameLabel(Map<String, int[]> remainingData) {
 
-		Label label = (Label) remainingData.keySet().toArray()[0];
+		Label label = (Label) trainingSet.get(remainingData.keySet().toArray()[0]);
 		
 		for(Map.Entry<String, int[]> entry : remainingData.entrySet()) {
-			if(trainingSet.get(entry.getKey()) != label) {
+			if(trainingSet.get(entry.getKey()).getName() != label.getName()) {
 				return false;
 			}
 		}
-		
+		System.out.println(label.getName());
 		return true;
 	}
 
@@ -158,7 +163,7 @@ public class DecisionTree {
 					tempRoot = tempRoot.left;
 				} else {
 					parent = tempRoot;
-					tempRoot = tempRoot.left;
+					tempRoot = tempRoot.right;
 				}
 			}
 			
@@ -181,7 +186,8 @@ public class DecisionTree {
 		}
 		
 	    for (int i = 1; i < files.size(); ++i) {
-			if (majorCandidate.getName() == trainingSet.get(files.get(i)).getName()) {
+	    	char currentLabel = trainingSet.get(files.get(i)).getName();
+			if (majorCandidate.getName() == currentLabel) {
 	            ++counter;
 	        } else if (counter == 0) {
 	            majorCandidate = trainingSet.get(files.get(i));
